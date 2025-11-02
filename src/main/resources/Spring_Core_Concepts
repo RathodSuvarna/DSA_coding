@@ -1,0 +1,311 @@
+1. What is Spring Framework and why is it used?
+Spring Framework is a lightweight and modular Java framework that simplifies enterprise application development.
+It provides features like dependency injection, AOP, and transaction management, which help developers build loosely
+coupled, maintainable, and testable applications. It’s widely used because it reduces boilerplate code and integrates
+easily with other technologies.
+========================================================================================================================
+2. What is Dependency Injection (DI)?
+Dependency injection is a design pattern where objects don’t create their own dependencies.
+Instead, the container (Spring IOC) provides the required objects.
+For example, if a Car class needs an Engine, instead of writing new Engine(),Spring inject the engine for
+us. This reduces coupling, makes testing easier (we can inject mock objects), and improves
+maintainability.
+Interview Tip:
+ In Spring, we can do this using constructor injection, setter injection, or field injection with
+annotations like @Autowired and @Qualifier.
+
+Indirect Questions:
+1.How does Spring achieve Inversion of Control (IoC)?
+IoC is achieved in Spring through Dependency Injection (DI), where the Spring container manages
+the lifecycle and dependencies of the objects, freeing the developer from manually instantiating
+dependencies.
+
+2. How does Spring boot makes Dependency injection easier compared to traditional Spring MVC?
+Spring boot makes dependency injection easier compared to traditional Spring by auto-
+configuring the beans and reducing the need for explicit configuration. In traditional Spring, we had to
+define beans and their dependencies in XML files or with annotations, which can be complex for large
+applications.
+But in Spring boot, we use Auto-configuration and component scanning to automatically discover and
+register beans on the applicaiton's context and classpath. This means now we don’t have manually wire
+up beans.
+========================================================================================================================
+3. Difference between @Component, @Service, and @Repository.
+ @Component: The most generic annotation. It marks a class as a Spring bean.
+
+ @Service: A specialization of @Component, used for classes that hold business logic. This makes
+code easier to understand since we know it belongs to the service layer.
+
+ @Repository: Another specialization, used for persistence layer (DAO classes).
+Point to remember: It also provides automatic translation of database-related exceptions into
+Spring’s DataAccessException.
+So basically, they all register beans with the container, but @Service and @Repository give extra
+meaning and behaviour for their specific layers.
+
+ Controller layer: Handles HTTP requests and responses. It is the entry point where the outside
+world talks to our app.
+
+ Business (Service) layer: It contains the business logic
+
+ DAO (Data Access Object) layer: Talks to the database. It only cares about saving, reading,
+updating, and deleting data.
+========================================================================================================================
+4. What are Spring bean scopes?
+1. Singleton:
+Spring creates only one instance of the bean for the entire application context. Spring manages
+full lifecycle (init and destroy). It is the Default scope.
+When to use: For stateless beans or shared services/repositories where all components can use
+the same instance.
+
+2. Prototype:
+Spring creates a new instance every time the bean is requested. Spring calls init methods but
+does not call destroy methods.
+When to use: For stateful beans or temporary objects where each client/request needs a fresh
+copy, like form objects or calculations.
+
+3. Request:
+A new bean instance is created for each HTTP request. Only relevant in web applications. Each
+request gets a fresh bean.
+When to use: For request-specific beans, like handling data for a single web request or form
+submission.
+
+4. Session:
+A new bean instance is created per HTTP session. All requests in the same session share the
+same bean.
+When to use: For user-specific session data, like shopping carts, logged-in user info.
+
+5. Application:
+A single bean instance per ServletContext. It is shared across the whole web application.
+When to use: For application-wide shared resources, like configuration objects, caches, or global
+services.
+
+What is Spring Bean
+ A java class which is managed by the IOC container is called as Spring Bean. The life cycle of the
+spring bean is taken care by the IOC container.
+ Spring beans are instantiated, configured, wired, and managed by IoC container.
+ Beans are created with the configuration metadata that the users supply to the container (by means
+of XML or java annotations configurations.)
+
+1. What is Pojo and DTO?
+A POJO (Plain Old Java Object) is a simple Java class that holds data and can also include business logic.
+A DTO (Data Transfer Object) is a lightweight object used only to carry data between layers or services.
+
+2. How is POJO and DTO are different from Spring bean?
+A Spring Bean is any object managed by the Spring IoC container (with lifecycle, scope, and dependency
+injection).
+POJOs/DTOs are just plain data holders, not managed by Spring unless explicitly registered as beans.
+
+3. When will you get NoSuchBeanException even though there is bean?
+ If package scanning is wrong, Spring won’t even see our class, so it never creates the bean.
+ If we use a wrong qualifier name, Spring looks for a bean with that exact name, can’t find it, and
+throws the exception.
+ If the bean is marked with a Profile or Condition, but that profile isn’t active or the condition
+fails, Spring will skip creating the bean.
+========================================================================================================================
+5. Difference between ApplicationContext and BeanFactory.
+“Both BeanFactory and ApplicationContext are IoC containers in Spring.
+BeanFactory provides basic bean management and uses lazy loading, while ApplicationContext builds on top of it and provides additional enterprise features like event handling, AOP, and internationalization.
+In modern Spring applications, ApplicationContext is preferred because it is more powerful and convenient.”
+
+What is IOC Container?
+IOC (Inversion of Control) container is the core part of Spring. It is responsible for:
+ Creating objects (beans).
+ Injecting dependencies.
+ Managing the life cycle of those objects.
+Instead of we controlling how objects are created and connected, the control is inverted to the
+container. Spring will take care of creating the beans and managing them. When ever we are ask for
+some object, Spring will provide it. There are two main types: BeanFactory (basic) and
+ApplicationContext (advanced, most used).
+========================================================================================================================
+6. How does @Autowired work?
+The @Autowired annotation in Spring is a mechanism for automatic dependency injection. It
+allows the Spring IoC (Inversion of Control) container to automatically resolve and inject dependencies
+into the Spring-managed components (beans) without requiring explicit configuration in XML or Java.
+
+If there are multiple beans of the same type, Spring throws an error unless we use
+@Qualifier or @Primary.
+========================================================================================================================
+7. Explain about @Qualifier and @Primary?
+In Spring, both @Qualifier and @Primary are used to resolve ambiguity when multiple beans of
+the same type are available for dependency injection.
+@Qualifier
+Why we need it: When there are multiple beans of the same type, Spring gets confused. @Qualifier tells
+Spring to pick the exact one using the name.
+How it works: We need to give the bean a name and then point to it when injecting.
+
+@Primary
+Why we need it: If multiple beans exist but one is used most often, then we can mark it as Primary.
+How it works: Mark one bean as @Primary, and Spring will pick it by default when we use @Autowired
+without qualifiers.
+
+Indirect Questions:
+1. How do you handle multiple beans of the same type in Spring??
+Use @Qualifier with @Autowired to specify which bean to inject. This ensures the correct bean
+is selected when duplicates exist.
+
+2. When you use both @Primary and @Qualifier, which one will take precedence?
+When both @Qualifier and @Primary are used in, @Qualifier takes
+precedence. @Primary indicates a default bean to use when multiple beans exist,
+while @Qualifier allows for very specific bean selection. When both are present, Spring prioritizes the
+bean identified by @Qualifier
+
+3. Two beans of same type are found and Spring throw NoUniqueBeanDefinitionException. How would
+you resolve it?
+Use @Qualifier with @Autowired to specify which bean to inject. This ensures the correct bean
+is selected when duplicates exist.
+
+4. There is only one bean but you annotated with @Qualifier and @Primary, how does it affect?
+If there is only one bean of that type:
+ @Primary has no effect, because there is nothing to choose between.
+ @Qualifier also doesn’t matter, the single bean will be injected regardless.
+They only come into play when multiple beans of the same type exist.
+========================================================================================================================
+8. Difference between @Bean vs @Configuration
+@Configuration
+It is a class-level annotation. When we annotate a class with @Configuration, Spring treats it as a
+source of bean definitions and manages it as a full Spring configuration.
+Point to remember: @Configuration classes are enhanced with CGLIB proxies. This means if one
+method calls another bean method inside the same class, Spring ensures the bean is singleton and
+doesn't create a new instance each time.
+
+@Bean:
+@Bean is a method-level annotation. It tells Spring: “The object returned by this method should
+be registered as a bean in the Spring context.”
+We can declare @Bean methods in both @Configuration and @Component classes, but there's
+an important difference, if one @Bean method calls another in a @Component class, we might
+accidentally create multiple instances instead of getting the singleton behaviour.
+
+1. Why do you sometimes get multiple instances of a bean if you don’t use @Configuration but just
+@Bean in a class?
+Without @Configuration, Spring doesn’t proxy the class, so calling one @Bean method from another
+creates a new instance instead of reusing the singleton.
+
+2. What happens if a @Bean method calls another @Bean method inside the same class?
+In a non-@Configuration class, calling a @Bean method directly bypasses Spring, so it creates a fresh
+object instead of using the Spring-managed bean.
+
+3. Can you use @Bean without @Configuration? What are the implications?
+Yes, it works, but we lose singleton guarantees between methods, and Spring simply registers
+whatever object the method returns.
+========================================================================================================================
+9. Explain Spring bean lifecycle.
+Bean Lifecycle in Spring (Step by Step)
+Think of a Spring Bean like a person’s life: it is born, it learns things, it works, and finally it is
+retired (destroyed). The IOC container manages all of this.
+Note: There are many life cycle methods but here I am mentioning only the important. We can read
+from the link below and check all the methods in the image
+1. Instantiation (Bean is created)
+factory method.
+The Spring container creates an object of the class. Usually, it calls the no-arg constructor or a
+
+2. Populating Properties (Dependency Injection)
+After creating the bean instances, Spring injects all the dependencies (other beans or values)
+into the bean, which can be done through constructor injection, setter injection, or field injection.
+
+3. Initialization (@PostConstruct)
+After dependencies are injected, Spring calls methods marked with @PostConstruct.
+This is where we put setup logic (like opening a DB connection, loading configs).
+It is the safest place to initialize things because all dependencies are already injected.
+
+4. Destruction (@PreDestroy)
+When the Spring container shuts down, methods marked with @PreDestroy run.
+Used for cleanup (closing DB connections, releasing resources).
+Prevents memory leaks by properly releasing resources.
+========================================================================================================================
+10. How do you define beans in XML vs using annotations?
+========================================================================================================================
+11. Explain AOP (Aspect Oriented Programming).
+AOP is a programming technique where we separate cross-cutting concerns from the main business
+logic.
+
+Cross cutting concerns are nothing but
+ Logging
+ Security checks
+ Transactions
+ Caching
+ Performance monitoring
+If we write these inside every class/method, our code gets messy and repetitive.
+So instead of writing the same logging or security code in every method, we write it in separately.
+Our business logic stays in different files and cross cutting concerns stays in separate files, both can be
+managed separately
+Example: Let’s say we have a payment service where we want to log when Payment started and after
+payment ended.
+Without AOP: (Note: Used System.out.print() just for example purpose, In prod we should not use it.)
+
+To implement AOP, start with including the spring-boot-starter-aop module in the application
+dependencies.
+========================================================================================================================
+12. How does @Transactional work?
+In Spring (and JPA), @Transactional is used to manage database transactions automatically.
+A transaction means a group of operations that should either:
+ all succeed together (commit), or
+ all fail together (rollback).
+Without transactions, if something fails halfway, we might end up with corrupted data in the database.
+Think of a banking example:
+ We transfer money from Account A to Account B.
+ Step 1: Deduct from Account A.
+ Step 2: Add to Account B.
+If step 1 succeeds but step 2 fails, out money is gone!
+That is why both steps should be inside one transaction; either both happen, or both fail.
+The @Transactional annotation in Spring is used to manage database transactions in a
+declarative manner. It simplifies transaction management by automatically handling the beginning,
+committing, or rolling back of transactions
+With @Transactional, if anything inside fails, both account updates are rolled back.
+
+Points to remember:
+1. Use @Transactional on service layer methods, where business logic happens (not usually on
+repository methods).
+2. In Spring, transactions only work when a method is called from outside the class itself,
+because Spring uses proxies to manage transactions.
+3. By default, rollback only happens for runtime exceptions. If we want rollback for checked
+exceptions too, we must configure it:
+@Transactional(rollbackFor = Exception.class)
+========================================================================================================================
+13. What are proxy objects in Spring?
+A proxy object in Spring is a wrapper around your actual bean that intercepts method calls before they reach the real
+object. Spring creates these proxy objects at runtime to add extra behavior — such as transaction management,
+security, logging, or method-level AOP — without modifying your original code.
+
+“In Spring, proxy objects are runtime-generated wrappers around actual beans that intercept method calls to add
+cross-cutting concerns like transactions, logging, or security. Spring creates these proxies using either JDK dynamic
+proxies (for interfaces) or CGLIB proxies (for concrete classes). This allows additional behavior without modifying
+the original class code.”
+========================================================================================================================
+14. How do you implement custom annotations in Spring?
+We can create custom annotations in Spring using @interface. Then, we use Spring AOP to define cross-cutting logic for
+methods or classes annotated with it. For example, an annotation like @LogExecutionTime can be handled by an aspect
+class using @Around advice to measure and log execution time. This helps in writing cleaner, reusable, and modular code.
+========================================================================================================================
+15. How does Spring manage circular dependencies?
+A circular dependency happens when two (or more) beans depend on each other to get created.
+When Spring tries to create them, it gets stuck in a loop and fails with a
+BeanCurrentlyInCreationException.
+There are a few ways to handle this:
+1. Use @Lazy injection
+Lazy tells Spring: “don’t create this bean immediately, create it only when needed.”
+This breaks the cycle because Spring can first create one bean and keep a proxy for the other.
+
+2. Use Setter or Field injection instead of Constructor
+Constructor injection creates problems in circular dependency because both beans are required
+immediately.
+But if we use a setter, Spring can first create the object and later “inject” the dependency.
+
+3. Refactor the design (Best Solution)
+Sometimes, circular dependency is a code smell. It means the classes are too tightly coupled.
+Example: Instead of having A depend on B and B depend on A, write a third-class ‘C’ and move shared
+logic , and both A & B classes depend on C.
+
+What is eager loading and lazy loading of beans??
+By default, Spring creates all singleton beans eagerly at the time the ApplicationContext starts.
+Lazy loading means: Create the bean only when it is first requested (injected or accessed).
+========================================================================================================================
+16. What is the difference between Singleton and Prototype beans?
+“In Spring, a Singleton bean means only one instance is created and shared across the application, while a Prototype
+bean creates a new instance each time it’s requested. Singleton is the default scope and is best for stateless beans,
+whereas Prototype is used for stateful or user-specific objects.”
+========================================================================================================================
+17. Explain constructor injection vs setter injection.
+“Constructor injection provides dependencies at the time of object creation, ensuring all required dependencies are
+available and making the class immutable. Setter injection, on the other hand, allows injecting dependencies after
+object creation and is better suited for optional dependencies. Generally, constructor injection is preferred in
+modern Spring applications for mandatory dependencies.”
+========================================================================================================================

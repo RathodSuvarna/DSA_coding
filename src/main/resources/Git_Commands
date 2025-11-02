@@ -1,0 +1,50 @@
+STEP 1: Initialize a new Git repository : Creates a new local Git repository in your current project folder.
+git init
+
+STEP 2: Check Git status : Shows which files are new, modified, or staged (ready to commit).
+git status
+
+STEP 3: Add files to staging : Adds all files (new or modified) to Git’s “staging area”.
+git add .
+
+You can also add specific files:
+git add src/main/java/com/suvarna/dsa/arrays/ReverseArray.java
+
+STEP 4: Commit your changes:  Saves your staged changes locally with a message describing what you did.
+git commit -m "Initial setup for DSA concept"
+
+STEP 5: Add a remote GitHub repository:  Connects your local repo to your GitHub repository (the remote destination).
+git remote add origin https://github.com/RathodSuvarna/DSA_coding.git
+
+STEP 6: Rename your default branch to main: Ensures your local branch name is main (same as on GitHub).
+git branch -M main
+
+STEP 7: Push your local code to GitHub: Uploads all your commits to GitHub.
+The -u sets the default remote branch, so next time you can just run git push.
+git push -u origin main
+
+AFTER INITIAL SETUP (Daily use):
+Once your project is connected to GitHub, you’ll just repeat these when you make changes:
+
+1️⃣ See what changed:
+git status
+
+2️⃣ Stage changes:
+git add .
+
+3️⃣ Commit with a message:
+git commit -m "Added DSA problem - reverse string"
+
+4️⃣ Push to GitHub:
+git push
+
+Command	What it does
+git log	Shows commit history
+git diff	Shows what’s changed before committing
+git pull	Updates your local repo with changes from GitHub
+git rm <file>	Removes a file from Git tracking
+git restore <file>	Restores a file to the last committed version
+
+
+
+
