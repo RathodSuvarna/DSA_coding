@@ -1,0 +1,876 @@
+**************
+SpringBoot:
+**************
+
+1. What is Spring Boot and its advantages?
+Spring Boot is a framework built on top of Spring that makes it faster and easier to develop Java
+applications. Normally with Spring, we have to do a lot of manual setup, configuration, and XML files.
+Spring Boot removes that pain by giving auto-configuration, embedded servers, and prebuilt
+dependencies. So, we can just focus on writing business logic instead of wiring everything.
+
+Spring Boot is a framework that creates stand-alone, production grade Spring based applications.
+So, this framework has so many advantages.
+ Easy to use: The majority of the boilerplate code required to create a Spring application is reduced
+by Spring Boot.
+
+ Rapid Development: Spring Boot’s opinionated approach and auto-configuration enable developers
+to quickly develop apps without the need for time-consuming setup, cutting down on development
+time.
+
+ Scalable: Spring Boot apps are intended to be scalable. This implies they may be simply scaled up or
+down to match the application’s needs.
+
+ Production-ready: Metrics, health checks, and externalized configuration are just a few of the
+features that Spring Boot includes and are designed for use in production environments.
+
+ Hot reloading allows developers to make changes to their code, resources, or configuration files
+while an application is running, and see those changes immediately reflected without needing to
+restart the application.
+========================================================================================================================
+2. Explain @SpringBootApplication.
+It is a combination of three important Spring annotations:
+ @EnableAutoConfiguration: Automatically configures beans depending on what’s on the classpath.
+For example, when we illustrate the spring-boot-starter-web dependency in the classpath, Spring
+boot auto-configures Tomcat , and Spring MVC .
+ @ComponentScan : This annotation scans the components (@Component, @Service, etc.) in the
+package of annotated class and its sub-packages.
+ @Configuration: This annotation configures the beans and packages in the class path.
+So, using @SpringBootApplication at the main class makes the application ready with all these features
+at once.
+========================================================================================================================
+3. What is dependency injection, and how does @Autowired help?
+Dependency injection is a design pattern where objects don’t create their own dependencies.
+Instead, the container (Spring IOC) provides the required objects.
+For example, if a Car class needs an Engine, instead of writing new Engine(),Spring inject the engine for
+us. This reduces coupling, makes testing easier (we can inject mock objects), and improves
+maintainability.
+Interview Tip:
+ In Spring, we can do this using constructor injection, setter injection, or field injection with
+annotations like @Autowired and @Qualifier.
+
+Indirect Questions:
+1.How does Spring achieve Inversion of Control (IoC)?
+IoC is achieved in Spring through Dependency Injection (DI), where the Spring container manages
+the lifecycle and dependencies of the objects, freeing the developer from manually instantiating
+dependencies.
+
+2. How does Spring boot makes Dependency injection easier compared to traditional Spring MVC?
+Spring boot makes dependency injection easier compared to traditional Spring by auto-
+configuring the beans and reducing the need for explicit configuration. In traditional Spring, we had to
+define beans and their dependencies in XML files or with annotations, which can be complex for large
+applications.
+But in Spring boot, we use Auto-configuration and component scanning to automatically discover and
+register beans on the applicaiton's context and classpath. This means now we don’t have manually wire
+up beans.
+
+The @Autowired annotation in Spring is a mechanism for automatic dependency injection. It
+allows the Spring IoC (Inversion of Control) container to automatically resolve and inject dependencies
+into the Spring-managed components (beans) without requiring explicit configuration in XML or Java.
+
+If there are multiple beans of the same type, Spring throws an error unless we use
+@Qualifier or @Primary.
+========================================================================================================================
+68. What are Spring Boot starters?
+Starters are preconfigured dependency bundles that make it easy to add features to the
+application.
+For example, if we want to create a web app, just add spring-boot-starter-web and it will bring
+everything we need: Spring MVC, Tomcat, JSON libraries, etc. Without starters, we would have to add
+each dependency manually.
+ Data JPA starter
+ Web starter
+ Security starter
+ Test Starter
+ Thymeleaf starter
+========================================================================================================================
+69. Difference between Spring and Spring Boot.
+ Spring: It is a framework that gives us tools for dependency injection, data access, and building
+applications. But it requires a lot of setup, XML configurations, and deployment steps.
+ Spring Boot: It is built on top of Spring and provides auto-configuration, embedded servers, and
+starter dependencies. It cuts down setup time and allows us to build production-ready apps with
+less effort.
+In short: Spring is the foundation; Spring Boot is the fast and modern way to use Spring.
+========================================================================================================================
+70. What is the role of application.properties?
+ Spring 10: What is application.properties file?
+It is the file used to store application configuration in Spring Boot. Instead of hardcoding values,
+we put them here, so they can be easily changed without touching the code. Example:
+server.port=8081
+spring.datasource.url=jdbc:mysql://localhost:3306/test
+spring.datasource.username=root
+spring.datasource.password=1234
+This makes the application flexible and easier to configure across different environments (dev, test,
+prod).
+
+Additional Question:
+1. How will you configure different Databases in your App for different environments?
+We can do using application.properties and Profile. Spring gives us profiles like dev, test, and prod.
+Each profile can have its own configuration. When the app runs, we simply tell Spring which profile to
+use, and it picks the right settings.
+The most common way is to create different property files for each environment like application-
+dev.properties, application-prod.properties. When we switch the profile, Spring automatically loads the
+right file.
+Sometimes it is not just the properties that change, the beans themselves need to be different.
+In that case, we can use @Profile.
+
+2. What is relaxed binding in spring boot?
+Relaxed binding in Spring Boot means we can define configuration properties in different styles (kebab-
+case, snake_case, camelCase, or UPPER_CASE) and Spring will still map them correctly to the Java fields.
+For example, server.port, server_port, or SERVER_PORT all bind to the serverPort property. This makes
+configuration flexible and developer-friendly, especially when working with environme
+========================================================================================================================
+71. What is an IOC container in Spring?
+What is IOC Container?
+IOC (Inversion of Control) container is the core part of Spring. It is responsible for:
+ Creating objects (beans).
+ Injecting dependencies.
+ Managing the life cycle of those objects.
+Instead of we controlling how objects are created and connected, the control is inverted to the
+container. Spring will take care of creating the beans and managing them. When ever we are ask for
+some object, Spring will provide it. There are two main types: BeanFactory (basic) and
+ApplicationContext (advanced, most used).
+========================================================================================================================
+49. How does auto-configuration in Spring Boot work?
+Spring Boot Auto Configuration is like having a smart assistant that automatically sets up the
+Spring application based on what it detects in the project.
+When we add a dependency (like Spring Data JPA or Spring MVC), Spring Boot notices this and
+auto configure the Data source
+How it works:
+Spring Boot looks at the classpath (all the jars in the project) and the beans we have already defined.
+It checks what’s missing and tries to auto-configure.
+Point to remember: Auto Configuration is triggered by the @EnableAutoConfiguration annotation (or
+just @SpringBootApplication which includes it).
+
+Indirect Questions:
+1. How Spring Boot knows what to configure?
+Spring Uses conditional annotations like:
+ @ConditionalOnClass: configures bean only if a certain class is on the classpath.
+ @ConditionalOnMissingBean: configures bean only if we haven’t already defined one.
+ @ConditionalOnProperty: configures bean only if a certain property is set.
+
+2. What happens if I define my own DataSource bean?
+Auto Configuration will skip creating a DataSource because of @ConditionalOnMissingBean.
+
+3. How do conditional annotations work in Auto Configuration?
+They check the environment, classpath, and existing beans to decide whether to create a bean or skip
+it
+
+4. Can Auto Configuration be disabled?
+Yes, using @SpringBootApplication(exclude = DataSourceAutoConfiguration.class) or via properties
+
+5. How do you override default auto configurations?
+ Define our own bean: Spring Boot will skip its default because most auto configs use
+@ConditionalOnMissingBean.
+ Use properties in application.properties (e.g., spring.datasource.url, spring.jpa.show-sql) to
+change the defaults.
+ Exclude specific auto configs with @SpringBootApplication(exclude =
+DataSourceAutoConfiguration.class).
+
+6. What if two auto-configurations conflict?
+If two auto-configurations provide the same bean or configure the same feature differently, we can end
+up with a conflict. This might cause:
+1. BeanDefinitionOverrideException : when two beans with the same name get created.
+2. Unexpected behavior : e.g., two DataSource beans when Spring expected only one.
+Solutions:
+ Use @ConditionalOnMissingBean, @ConditionalOnClass, etc., to make configs load only when
+needed.
+ Exclude one of the auto-configs via spring.autoconfigure.exclude in application.properties.
+
+7. How to tell auto-configuration not to create bean when already bean exists?
+Use @ConditionalOnMissingBean
+========================================================================================================================
+50. What is @Configuration vs @Bean?
+@Configuration
+It is a class-level annotation. When we annotate a class with @Configuration, Spring treats it as a
+source of bean definitions and manages it as a full Spring configuration.
+Point to remember: @Configuration classes are enhanced with CGLIB proxies. This means if one
+method calls another bean method inside the same class, Spring ensures the bean is singleton and
+doesn't create a new instance each time.
+
+@Bean:
+@Bean is a method-level annotation. It tells Spring: “The object returned by this method should
+be registered as a bean in the Spring context.”
+We can declare @Bean methods in both @Configuration and @Component classes, but there's
+an important difference, if one @Bean method calls another in a @Component class, we might
+accidentally create multiple instances instead of getting the singleton behaviour.
+
+Indirect Question:
+1. Why do you sometimes get multiple instances of a bean if you don’t use @Configuration but just
+@Bean in a class?
+Without @Configuration, Spring doesn’t proxy the class, so calling one @Bean method from another
+creates a new instance instead of reusing the singleton.
+
+2. What happens if a @Bean method calls another @Bean method inside the same class?
+In a non-@Configuration class, calling a @Bean method directly bypasses Spring, so it creates a fresh
+object instead of using the Spring-managed bean.
+
+3. Can you use @Bean without @Configuration? What are the implications?
+Yes, it works, but we lose singleton guarantees between methods, and Spring simply registers
+whatever object the method returns.
+========================================================================================================================
+51. How do profiles work in Spring Boot (@Profile use case)?
+In the real time projects, we might need different configurations for different environments like
+Prod, QA and Dev.
+This is where profiles come into picture. Spring boot allows us to manage application configurations and
+components based on the environment in which the application is running.
+This can be done through various methods:
+ application-{profile}.properties or application-{profile}.yml: Separate configuration files are created
+for each profile (e.g., application-dev.properties, application-prod.yml).
+ @Profile annotation: This annotation is used on classes
+(e.g., @Configuration, @Component, @Service, @Repository) or methods to indicate that they
+should only be loaded or activated when a specific profile is active
+
+Key points:
+Profiles are activated at run time using JVM system properties: -Dspring.profiles.active=prod.
+Or Using spring.profiles.active property, Set in application.properties, application.yml
+@Profile
+The @Profile annotation used to conditionally register beans or load configuration based on the active
+profiles.
+It is applied to:
+@Configuration classes: To load specific configuration classes only when a particular profile is active.
+========================================================================================================================
+52. How do you handle global exception handling in Spring Boot (@ControllerAdvice)?
+“In Spring Boot, we use @ControllerAdvice along with @ExceptionHandler to handle exceptions globally across all
+controllers. It helps centralize error handling, making the code cleaner and more maintainable. We can define custom
+exception classes, and return structured responses using ResponseEntity. For example, if a ResourceNotFoundException
+occurs, the global handler can return a 404 response with a custom error message.”
+========================================================================================================================
+53. application.properties vs application.yml , when to prefer which?
+Both are used for external configuration in Spring Boot, but the syntax style is different.
+
+application.properties (key-value pairs):
+server.port=8081
+spring.datasource.url=jdbc:mysql://localhost:3306/test
+spring.datasource.username=root
+
+application.yml (YAML format):
+server:
+port: 8081
+spring:
+datasource:
+url: jdbc:mysql://localhost:3306/test
+username: root
+
+Indirect Question:
+1. When do you prefer .properties and .yml file?
+For simplicity and small projects: application.properties might be preferred due to its directness.
+For complex, hierarchical configurations and improved readability: application.yml is generally
+considered superior due to its structured nature and support for various data types.
+Interview Tip: These file helps us to keep configs outside the code, so we can change them per
+environment without touching Java classes.
+========================================================================================================================
+54. What is the use of CommandLineRunner or ApplicationRunner?
+These two interfaces in Spring Boot are used to run some code right after the application starts up
+(After the Spring application context is fully initialized. They are super useful for initialization tasks like:
+ Loading test data
+ Running startup checks
+ Starting background processes
+CommandLineRunner
+ It is an interface in Spring Boot.
+ If the class implements it, the run(String... args) method will execute right after the Spring
+ApplicationContext is loaded and before the application fully starts serving requests.
+ The method gives the access to the raw command-line arguments as a String[].
+
+ApplicationRunner
+ApplicationRunner is another interface in Spring Boot that serves a similar purpose
+to CommandLineRunner, but it provides a more structured way to access and parse command-line
+arguments. The main difference is: instead of giving a raw String[], it provides an ApplicationArguments
+object.
+
+Indirect Questions:
+1. How do you run some logic right after Spring Boot starts?
+Using CommandLineRunner or ApplicationRunner.
+
+2. If you just need to check if a simple flag like --enable-feature was passed, which runner would you use?
+CommandLineRunner is enough since we are just checking raw args.
+
+3. If your Spring Boot app needs to read --db-url=localhost:3306 from command line, which runner is
+better?
+ApplicationRunner because it easily handles --key=value arguments.
+
+4. If you had both CommandLineRunner and ApplicationRunner in your project, which one runs first?
+Both run, order depends on @Order annotation or Ordered interface.
+========================================================================================================================
+56. How does the embedded Tomcat server work in Spring Boot?
+In normal Java web apps, we used to deploy the WAR file into an external server like Tomcat or Jetty.
+That meant installing and managing the server separately.
+Spring Boot ships with an embedded server inside the application.
+ The app is packaged as a JAR (not WAR).
+ When we run it, the server starts along with the code.
+ We don’t need to deploy to any external container.
+What’s the default server?
+By default, Spring Boot uses Apache Tomcat as the embedded server.
+So, if we don’t configure anything, we are already running on Tomcat without even realizing it.
+Suppose we prefer Jetty instead of Tomcat. Here is what we do in Maven:
+Exclude Tomcat (since it comes by default) and Add Jetty dependency:
+<dependency>
+  <groupId>org.springframework.boot</groupId>
+  <artifactId>spring-boot-starter-web</artifactId>
+  <exclusions>
+    <exclusion>
+      <groupId>org.springframework.boot</groupId>
+      <artifactId>spring-boot-starter-tomcat</artifactId>
+    </exclusion>
+  </exclusions>
+</dependency>
+<dependency>
+  <groupId>org.springframework.boot</groupId>
+  <artifactId>spring-boot-starter-jetty</artifactId>
+</dependency>
+========================================================================================================================
+
+**************
+REST API:
+**************
+
+1. What is HTTP and which methods do you commonly use?
+“HTTP stands for HyperText Transfer Protocol. It’s the standard communication protocol used between clients and servers
+over the web. In RESTful APIs, we commonly use methods like GET to fetch data, POST to create new data, PUT or PATCH
+to update existing data, and DELETE to remove data. These methods make APIs standardized and predictable.”
+========================================================================================================================
+73. What are common HTTP status codes (200, 404, 500)?
+“HTTP status codes are responses sent by the server to indicate the outcome of a request.
+Common ones include:
+
+200 (OK) → Request successful
+404 (Not Found) → Resource doesn’t exist
+500 (Internal Server Error) → Server encountered an unexpected condition.
+They help clients understand what went right or wrong with their request.”
+========================================================================================================================
+74. What is REST API?
+“A REST API (Representational State Transfer API) is a web service that allows communication between client and server
+ using HTTP. It exposes resources through URLs and uses standard HTTP methods like GET, POST, PUT, and DELETE to
+ perform operations. REST APIs are stateless, scalable, and typically return data in JSON format. In Spring Boot,
+ we create REST APIs using annotations like @RestController and @RequestMapping.”
+
+ Uses of REST API
+ 1. Communication between applications: Web app or mobile app can fetch data from a backend
+ server via REST APIs.
+ 2. Platform-independent: Since it is based on HTTP, any system (Java, Python, React, Android, iOS)
+ can use it.
+ 3. Scalability: Each request is stateless (server doesn’t store session info), making it easier to scale.
+ 4. Integration: REST APIs allow connecting third-party services (payment gateways, maps, social
+ media).
+ 5. Reusability: Once an API is built, multiple clients (web, mobile, desktop apps) can use the same
+ endpoints.
+
+ Indirect Question:
+ 1. What is stateless and stateful in REST?
+ In REST, stateless means every request from the client must contain all the info needed, and the
+ server doesn’t remember past interactions.
+ Stateful means the server stores session data about the client, so requests can rely on the server’s
+ memory of previous calls.
+ Stateless example:
+  A GET /users/123 request always includes authentication (like a token in headers).
+  The server doesn’t remember the user logged in; every request carries the needed info.
+ Stateful example:
+  we log in once, the server creates a session and stores it in memory.
+  On the next GET /users/123, we just send a session ID, and the server uses its stored state to
+ know the user who logged in.
+ 2. How can you maintain a session in a stateless REST API
+ Use tokens instead
+ The common approach is JWT (JSON Web Tokens):
+  Client logs in then server generates a token with user info and expiry.
+  Client sends the token on every request (usually in the Authorization header).
+  Server validates the token, without needing to store session state.
+ 3. Why should you handle response timeout while calling any API and how to handle in Spring?
+ If we don’t handle response timeouts when calling an API, our app can just wait there forever if
+ the other service is slow or dead. That means bad user experience, and even system crashes under load.
+ In Spring, we handle this by setting timeouts in the HTTP client. For example, with RestTemplate or
+ WebClient, we can configure connectTimeout and readTimeout. If the API doesn’t respond in that time,
+ the call fails fast, and we can retry, show an error, or switch to a fallback.
+
+========================================================================================================================
+75. Explain the difference between @RestController and @Controller.
+@Controller
+ It is a specialization of @Component; it marks class as a web request handler. It is used to
+declare common web controllers that can return HTTP responses
+ By default, methods in a @Controller return views (like JSP, Thymeleaf templates) unless we add
+@ResponseBody.
+ Typically used in web applications where we return HTML pages.
+@RestController
+ It is the combination @Controller + @ResponseBody. It is used to create controllers for REST
+APIs that can return JSON responses.
+ Every method automatically returns JSON/XML instead of a view.
+ Typically used in REST APIs.
+
+Tricky Questions:
+1. What happens if we use both @Controller and @RestController on the same class?
+ @RestController itself is a combination of @Controller + @ResponseBody.
+ If we add @Controller along with @RestController, it doesn’t break anything.
+ But it is redundant, Means Spring will still treat it as a @RestController.
+2. What happens if we don’t use @ResponseBody with @Controller?
+Without @ResponseBody, Spring will assume the method is returning a view name
+(HTML/JSP/Thymeleaf template).
+Spring will look for a template called Hello World.html instead of returning "Hello World" as text.
+To return raw data (like JSON, String, etc.), we must use @ResponseBody or just switch to
+@RestController.
+
+3: Can we use @RestController and still return a view (HTML)?
+By default, no. @RestController forces @ResponseBody on all methods, so it always returns JSON/XML.
+If we really want to return a view, we must explicitly use ModelAndView.
+4. What happens if a method in @RestController returns void?
+ If the method is void and we don’t write anything to the response, the client just gets an empty
+200 OK response.
+ Useful in cases like a DELETE endpoint where we don’t want to return data.
+========================================================================================================================
+76. Can you explain how you would create a simple REST API in Spring Boot?
+“To create a REST API in Spring Boot,
+I start by adding the Spring Web dependency and creating a @RestController class.
+I use annotations like @GetMapping, @PostMapping, @PutMapping, and @DeleteMapping to handle CRUD operations on a resource.
+ Each endpoint returns a ResponseEntity with appropriate HTTP status codes like 200 OK, 201 Created, or 404 Not Found.
+  This makes the API RESTful and easy to consume by clients.”
+========================================================================================================================
+77. Difference between PUT and PATCH.
+PUT: It Replaces the entire resource with the new one. If we don’t provide some fields, they can be
+overwritten with defaults or null.
+
+PATCH: It is used for Partially updates means only the fields we send are updated, the rest stay
+unchanged.
+
+Tricky Question:
+In both the methods we are using userRepository.save(user), then how does PUT different
+from PATCH?
+Let’s see How save() works under the hood
+ In JPA/Hibernate, save() doesn’t directly do an SQL UPDATE of everything.
+ It checks if the entity already exists (id is present).
+o If new, it runs INSERT.
+o If existing, it compares fields in the managed entity with what’s changed and generates
+an UPDATE ... SET ... WHERE id=?.
+Here the thing is it is not about what Hibernate does, it is about semantics of the API contract.
+Technically, both may call save()
+But from a REST design perspective:
+ Use PUT if clients must send the entire object.
+ Use PATCH if clients can send only the fields they want to change.
+========================================================================================================================
+78. What is Idempotency?
+Idempotency means making the same request multiple times gives the same result without causing
+side effects.
+In HTTP:
+ GET is idempotent, calling it multiple times returns the same data.
+ DELETE is idempotent, deleting the same resource multiple times still results in "deleted".
+ PUT is idempotent, updating a resource with the same payload gives the same state.
+Example:
+ DELETE /users/123 : first call deletes, next calls return "user not found", but the system state
+doesn’t change further.
+
+1. Why Patch is not idempotent?
+PATCH is not guaranteed idempotent.
+Reason: PATCH applies a partial update. If the patch operation is additive (like “increment balance by
+100”), sending it multiple times changes the state each time.
+But if the patch operation is a direct replacement (like “set name to ‘CodingLyf”), then it behaves
+idempotent.
+PATCH may or may not be idempotent depending on how you design the patch semantics.
+By HTTP spec, PATCH is not required to be idempotent (unlike PUT).
+
+2. Can we make POST as idempotent?
+Normally, POST is not idempotent because each call creates a new resource (like adding a new record).
+But yes, we can design a POST API to behave idempotently using Idempotency Keys.
+How it works
+ While invoking the API, Client generates a unique key (say Idempotency-Key: abc123).
+ Server stores this key with the request and its response.
+ If the client retries the same POST with the same key, the server returns the stored response
+instead of creating a new resource again.
+Real-world use case:
+ Payment APIs (Stripe, PayPal, Razorpay, etc.)
+o When we POST a payment request, client include an idempotency key.
+o If the client retries due to timeout, the server won’t charge the customer twice.
+So, POST can be made idempotent through server-side logic + idempotency keys.
+========================================================================================================================
+57. Difference between @RequestMapping and @GetMapping.
+@RequestMapping
+ It is a general-purpose annotation to map HTTP requests to handler methods.
+ It can handle all HTTP methods (GET, POST, PUT, DELETE, etc.) via the method attribute.
+@RequestMapping(value = "/users", method = RequestMethod.GET)
+public List<User> getUsers() {
+}
+@GetMapping
+ It is the Shortcut (specialization) of @RequestMapping(method = RequestMethod.GET).
+ It is Cleaner, more readable when the method is only handling GET requests.
+@GetMapping("/users")
+public List<User> getUsers() {
+}
+Tricky Questions
+1. Can @RequestMapping handle multiple HTTP methods in a single method?
+Yes
+2. What happens if you use @RequestMapping without specifying a method?
+It will match all HTTP methods (GET, POST, PUT, DELETE, etc.) for that URL.
+
+3. Can you combine @RequestMapping at class level with @GetMapping at method level?
+Yes, that is common. The class-level @RequestMapping acts as a base path
+========================================================================================================================
+58. @PathVariable vs @RequestParam.
+@PathVariable
+It is used to extract values from the URL path itself.
+Typically used when the value uniquely identifies a resource.
+
+@RequestParam
+ Used to extract values from query parameters in the URL.
+ Typically used for filtering, searching, sorting, or optional values.
+
+When to use which
+Use @PathVariable when the value is part of the resource identifier.
+/users/1/orders/99 userId = 1, orderId = 99
+Use @RequestParam for optional or filtering parameters.
+/users?city=Hyd&sort=asc
+
+Tricky Questions:
+1. What happens if you don’t pass a @RequestParam that is required?
+By default, it throws an exception (MissingServletRequestParameterException). To avoid this, we
+can make it optional:
+@RequestParam(required = false) String city or
+@RequestParam(defaultValue = "Hyderabad") String city
+2. What happens if you don’t pass a @PathVaraible that is required?
+If the value is required (default behavior) and it is missing from the request URL, we will get a 400
+Bad Request error because Spring can’t bind it.
+If we make
+========================================================================================================================
+59. How do you validate request inputs in Spring Boot REST APIs?
+In Spring Boot, we can validate incoming request data using Java Bean Validation (JSR-380) with annotations
+like @NotNull, @Size, @Email, etc.
+We apply these annotations to model (DTO) classes and enable validation by adding @Valid or @Validated in controller
+methods.
+Spring automatically checks the constraints and throws a MethodArgumentNotValidException if validation fails,
+which we can handle globally using @ControllerAdvice.
+========================================================================================================================
+60. How would you secure a REST endpoint?
+In Spring Boot, REST endpoints are commonly secured using Spring Security.
+We can secure them with authentication (verifying the user’s identity) and authorization (verifying user’s permissions).
+This is typically implemented using JWT tokens, Basic Authentication, or OAuth2.
+
+Spring Security provides filters and configuration classes where we can define which endpoints are public and which
+require authentication.
+========================================================================================================================
+61. How do you handle exceptions in REST APIs and return proper status codes?
+In Spring Boot, we handle exceptions in REST APIs using @ControllerAdvice and @ExceptionHandler.
+This allows us to manage errors globally and return meaningful HTTP status codes with custom error messages, instead of generic server errors.
+
+It helps keep our controllers clean and ensures consistent error responses across all endpoints.
+
+“I handle exceptions globally using @ControllerAdvice and @ExceptionHandler.
+This approach allows me to return meaningful HTTP status codes and custom JSON error messages, ensuring a consistent error response format across all APIs.
+
+For example, if a resource is not found, I return a 404 status; for invalid input, a 400; and for server errors, a 500.
+This keeps the controller clean and improves API usability.”
+========================================================================================================================
+62. Difference between @RequestBody and @ResponseBody?
+@RequestBody is used to convert the JSON request body into a Java object (deserialization).
+
+@ResponseBody is used to convert a Java object into a JSON response body (serialization).
+
+In short, @RequestBody maps incoming data → Java object,
+and @ResponseBody maps Java object → outgoing JSON.
+========================================================================================================================
+63. How to implement global exception handling in REST?
+n Spring Boot, we use @ControllerAdvice along with @ExceptionHandler to handle exceptions globally across all REST controllers.
+
+This ensures a centralized error-handling mechanism that returns consistent and meaningful HTTP status codes and JSON
+responses instead of generic server errors.
+
+“In Spring Boot, I handle exceptions globally using @ControllerAdvice with @ExceptionHandler methods.
+It allows me to centralize all exception handling and send proper HTTP responses like 400, 404, or 500 with
+clear messages.
+
+For example, if a resource isn’t found, I return a 404 with an error body; for invalid input, a 400.
+This keeps my controllers clean and ensures consistent error responses across all APIs.”
+========================================================================================================================
+64. How do you secure REST APIs with Spring Security?
+Spring Security is a framework that provides authentication and authorization for Spring applications.
+To secure REST APIs, we configure a SecurityFilterChain bean to define which endpoints are public and which require
+authentication.
+For example, we can use Basic Authentication (username/password) for simple use cases or JWT (JSON Web Token)
+for stateless, token-based security in REST APIs.
+With JWT, the user logs in once, receives a signed token, and sends it in the Authorization header for all
+future requests — making the API stateless and scalable.
+Additionally, we can use role-based access control with annotations like @PreAuthorize("hasRole('ADMIN')") to p
+rotect specific methods.
+========================================================================================================================
+60.  What is Spring Boot Actuator, and why is it useful?
+Spring Boot Actuator is a sub-project of Spring Boot that provides production-ready features to monitor
+and manage thw application.
+ It adds a set of built-in endpoints that expose information about the application, like health,
+metrics, environment properties, and more.
+ These endpoints helps to understand, monitor, and manage the app without writing extra code.
+Key Features
+1. Health Checks: Verify if the app and its dependencies (database, messaging queues, etc.) are
+working properly.
+2. Metrics: Access information about memory usage, CPU, active threads, HTTP request statistics,
+etc.
+3. Environment & Config Info: View active profiles, properties, and configuration settings.
+4. Logging: Check and change logging levels at runtime.
+5. Tracing & Auditing: Track HTTP requests and audit application events (with optional
+integrations).
+How do you check if a running service is up in microservice
+We can REST endpoint like /health or /actuator/health.
+
+========================================================================================================================
+
+65. What are Spring Boot Actuator endpoints?
+List out some important Actuator endpoints?
+1. /actuator/health
+This endpoint checks the health of the application. It tells if the app is running fine, DB is connected,
+disk space is available, etc.
+2. /actuator/info
+This endpoint shows application info that we configure in application.properties (like version,
+description).
+3. /actuator/metrics
+The `/actuator/metrics` endpoint provides various application metrics. For example, to see JVM
+memory usage, we can query: localhost:8080/actuator/metrics/jvm.memory.used
+4. /actuator/beans: Displays a complete list of all Spring beans in the application.
+Indirect Question:
+1. How do you check how many times each API endpoint was called, along with timings?
+We need to /actuator/metrics/http.server.requests
+For a particular API: actuator/metrics/http.server.requests?tag=uri:/hello-world&tag=method:GET
+========================================================================================================================
+60. What is filter in Spring boot and how it will used?
+In Spring Boot, a Filter is a component that intercepts and processes HTTP requests and
+responses at the web container level, before they reach the Spring DispatcherServlet and after the
+DispatcherServlet has handled them. Filters are part of the Java Servlet API and are used to implement
+cross-cutting concerns in web applications.
+
+Common use cases include:
+ Authentication and Authorization: Filters can verify user credentials and permissions before
+allowing access to resources (e.g., Spring Security utilizes filters).
+ Logging and Auditing: Recording request details, response status, and other relevant
+information for monitoring and debugging.
+ Request/Response Modification: Altering request headers, parameters, or response content
+(e.g., compression, content negotiation).
+ Data Validation: Pre-processing requests to validate input data before it reaches the application
+logic.
+ CORS (Cross-Origin Resource Sharing): Managing access control for requests from different
+origins.
+
+ How do you create a custom filter?
+Steps to create the filter
+ Implement the jakarta.servlet.Filter interface (or javax.servlet.Filter for older versions).
+ Override the doFilter() method, which contains the logic for processing the request and
+response.
+ Use chain.doFilter(request, response) to pass the request to the next filter in the chain or to the
+target servlet.
+Registering the Filter:
+ Using @Component and @Order: Annotate the filter class with @Component to make it a
+Spring bean. Use @Order to define the order of execution if we have multiple filters.
+
+Point to remember: If we annotate the filter with @Component, Spring Boot automatically adds it to
+the filter chain.
+Use cases of filters.
+ Authentication & Authorization: Check JWT tokens, session IDs, or API keys.
+ Logging & Auditing: Log request URLs, headers, or response times.
+ Compression or Transformation: Compress responses, modify headers, or transform JSON.
+ Rate Limiting: Block excessive requests.
+ CORS Handling: Add headers for cross-origin requests.
+Indirect Question:
+1. How can you implement JWT token validation for all APIs without modifying each controller?
+Use a custom filter (e.g., extending OncePerRequestFilter) and register it in the Spring Security filter
+chain.
+2. If you want to log every incoming API call and its response time, which component would you use?
+Implement a Spring Filter or HandlerInterceptor (Refer Question no 100 for Interceptor)
+3. How does Spring Boot decide
+In Spring Boot, a Filter is a component that intercepts and processes HTTP requests and
+responses at the web container level, before they reach the Spring DispatcherServlet and after the
+DispatcherServlet has handled them. Filters a
+========================================================================================================================
+60. What is interceptor and its uses?
+Interceptors in Spring Boot are components within the Spring Web MVC framework that are
+used to intercept and process HTTP requests and responses. They provide a mechanism to execute
+custom logic before a request reaches a controller, after the controller has processed the request but
+before the response is sent.
+Interceptors are generally used for operations such as security, authentication, authorization,
+logging and monitoring
+Both Filters and Interceptors serving the same purpose. But what is the difference between them (Refer
+Question No 368, Spring 116)
+Key Points About Interceptors
+1. Interceptors are tied to Spring MVC and work with HandlerMapping and
+HandlerExecutionChain.
+2. They can pre-process requests, post-process responses, and handle after-completion logic used
+for cleanup tasks.
+3. Unlike filters, interceptors have access to the controller’s handler method and can examine
+method arguments, model data, and view.
+366 Spring 115: How to create an Interceptor?
+Step 1: Create a component by Implementing the HandlerInterceptor Interface
+Spring provides the HandlerInterceptor interface. It has three main methods:
+ preHandle():
+When an interceptor is implemented, any request before reaching the desired controller
+will be intercepted by this interceptor and some pre-processing can be performed like logging,
+authentication, redirection, etc.
+Must return true to continue to the controller; false stops the request.
+ postHandle():
+This method is executed after the request is served but just before the response is sent
+back to the client. It intercepts the request in the final stage, giving us a chance to make any
+final trivial adjustments.
+ afterCompletion():
+This method is executed after the request and response mechanism is completed. This
+method can turn out to be very useful in cleaning up the resources once the request is served
+completely.
+Step 2: Interceptors need to be registered with Spring MVC using WebMvcConfigurer:s
+========================================================================================================================
+60. Difference between Filter and Interceptor?
+A Filter is part of the servlet specification and works at the web container level — it runs before the request
+reaches Spring and is mainly used for tasks like logging, authentication, or CORS.
+
+An Interceptor, on the other hand, is part of the Spring MVC framework and runs before and after controller methods
+ — it can access handler (controller) details and is often used for authorization checks, modifying requests/responses, or adding extra logic around controller execution.
+========================================================================================================================
+66. How do you enable pagination and sorting in Spring Data REST?
+Spring Data REST provides pagination and sorting automatically when you use Spring Data JPA repositories.
+
+If your repository extends PagingAndSortingRepository or JpaRepository, Spring Data REST exposes endpoints
+with pagination and sorting support by default.
+You can use query parameters like:
+
+?page=0&size=5 → for pagination
+?sort=fieldName,asc or ?sort=fieldName,desc → for sorting
+
+For example:
+GET /employees?page=1&size=10&sort=salary,desc
+
+Internally, Spring Data REST uses the Pageable and Sort interfaces to handle these parameters automatically.
+========================================================================================================================
+
+**************
+Database & JPA
+**************
+67. What is ORM and why do we use it?
+ORM stands for Object Relational Mapping.
+Here is the idea:
+ In Java, we work with objects (classes, objects, methods).
+ In databases, we work with tables, rows, and columns.
+ But they don’t directly match. Example: a User object in Java is not the same as a user table in SQL.
+ORM is the bridge between objects and database tables. It automatically maps:
+ A class to a table
+ An object to a row
+ A field/variable to a column
+So instead of writing raw SQL like this:
+INSERT INTO user (id, name) VALUES (1, CodingLyf);
+We can just do
+User u = new User(1, "CodingLyf");
+session.save(u);
+
+The ORM framework will convert that into SQL internally and talk to the database.
+Hibernate is the popular ORM Framework.
+========================================================================================================================
+2. What is Hibernate and how it works?
+Hibernate is the most popular ORM framework in Java. It implements ORM and makes database
+interaction much simpler.
+Key features:
+1. Automatic Mapping: Maps Java classes to DB tables using annotations.
+2. No need for boilerplate SQL: We use methods like save(), update(), delete().
+3. HQL (Hibernate Query Language): We can query using object names instead of table names.
+4. Caching: Improves performance by storing frequently used data in memory.
+5. Database independence: Same code works for MySQL, PostgreSQL, Oracle, etc. We need to just
+change the config.
+========================================================================================================================
+What is JPA?
+Spring Data JPA is a part of the Spring framework that makes it easier to work with databases using JPA
+(Java Persistence API).
+It reduces boilerplate code by allowing you to perform CRUD operations just by defining repository interfaces
+ instead of writing SQL or DAO implementations.
+Under the hood, it uses Hibernate (or another JPA provider) to handle the actual database interaction.
+
+Spring Data JPA is a layer built on top of JPA and Hibernate that makes database interaction easier, faster, and more
+readable by reducing boilerplate code.
+========================================================================================================================
+68. What is JPA vs Hibernate?
+JPA (Java Persistence API) is a specification that defines a set of rules and interfaces for object-relational
+mapping (ORM) — it tells how Java objects should be mapped to database tables.
+Hibernate is an implementation of the JPA specification — it provides the actual code and features that make JPA work.
+In simple terms:
+JPA = What to do (the standard/specification)
+Hibernate = How to do it (the implementation)
+JPA provides interfaces like EntityManager, Query, and annotations such as @Entity, @Id, while Hibernate provides the concrete classes behind them and adds extra features like caching, criteria API, and better performance tuning.
+========================================================================================================================
+69. Explain @Entity, @Id, @GeneratedValue.
+@Entity
+Marks a Java class as a JPA entity, meaning it represents a table in the database.
+Each instance of the class corresponds to a row in that table.
+
+@Id
+Specifies the primary key of the entity — a unique identifier for each record in the table.
+
+@GeneratedValue
+Used along with @Id to tell JPA that the primary key should be generated automatically (e.g., auto-increment).
+Common strategies:
+GenerationType.AUTO – JPA decides the strategy
+GenerationType.IDENTITY – database auto-increment
+GenerationType.SEQUENCE – uses a database sequence
+========================================================================================================================
+70. Explain lazy vs eager loading with an example.
+Lazy Loading (Default for @OneToMany)
+Data is loaded only when it’s actually accessed — this improves performance by avoiding unnecessary queries.
+@Entity
+public class Employee {
+    @OneToMany(mappedBy = "employee", fetch = FetchType.LAZY)
+    private List<Project> projects;
+}
+If you fetch an Employee, only the employee data is loaded.
+The projects list is fetched later (on demand) when you call employee.getProjects().
+✅ Advantage: Better performance
+❌ Disadvantage: Can cause LazyInitializationException if accessed outside a session
+
+Eager Loading
+Related data is fetched immediately along with the main entity — even if you don’t use it.
+@Entity
+public class Employee {
+    @OneToMany(mappedBy = "employee", fetch = FetchType.EAGER)
+    private List<Project> projects;
+}
+When you fetch an Employee, its projects are also loaded in the same query or with joins.
+✅ Advantage: Easy to access related data
+❌ Disadvantage: Can hurt performance if there’s a lot of related data
+========================================================================================================================
+71. How do you handle relationships like OneToMany in JPA?
+n JPA, relationships between entities are managed using annotations.
+A @OneToMany relationship is used when one entity is related to multiple entities — for example, one Department
+can have many Employees.
+
+Key Points:
+
+@OneToMany is used on the parent side (Department).
+@ManyToOne is used on the child side (Employee).
+mappedBy specifies the field in the child entity that owns the relationship.
+cascade = CascadeType.ALL allows automatic persistence of child entities when saving the parent.
+fetch = FetchType.LAZY improves performance by loading related data only when needed.
+
+💬 In short:
+@OneToMany maps one entity to multiple related entities.
+It’s paired with @ManyToOne on the other side to maintain a bidirectional relationship between tables.
+========================================================================================================================
+72. What’s the difference between save() and saveAndFlush() in Spring Data JPA?
+save()
+Saves the entity in the persistence context (memory) but does not immediately write to the database.
+The actual database update happens later, when the transaction is committed or the persistence context is flushed
+ automatically.
+employeeRepository.save(employee); // changes saved in memory
+
+saveAndFlush()
+Saves the entity and immediately flushes changes to the database.
+Useful when you need the data to be available in the database right away within the same transaction.
+employeeRepository.saveAndFlush(employee); // immediately writes to DB
+
+save() → saves to persistence context (delayed write).
+saveAndFlush() → saves and immediately writes to the database.
+========================================================================================================================
+
+**************
+Testing
+**************
+73. What is JUnit, and what are its key annotations?
+========================================================================================================================
+74. What is Mockito? When would you use @Mock vs @Spy?
+========================================================================================================================
+75. What is @SpringBootTest vs @WebMvcTest?
+========================================================================================================================
+76. How do you test REST controllers with MockMvc?
+========================================================================================================================
+**************
+Security
+**************
+77. Authentication vs Authorization, explain with examples.
+========================================================================================================================
+78. What is Spring Security, and how does it integrate with REST APIs?
+========================================================================================================================
+79. How would you secure an endpoint with JWT tokens?
+========================================================================================================================
+80. Difference between 401 and 403 HTTP codes.\
+========================================================================================================================
+81. Git commands, Git rebase vs Merge
+========================================================================================================================
