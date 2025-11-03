@@ -75,6 +75,35 @@ Example:
 
 ------------------------------------------------------------------------------------------------------------------------
 2. What is the Circuit Breaker Pattern?
+The Circuit Breaker pattern is used in microservices to prevent cascading failures when one service repeatedly
+calls another that is slow or unavailable.
+It acts like an electrical circuit breaker — stopping calls to a failing service for a certain time to give it a
+chance to recover.
+
+⚙️ How It Works:
+Closed State:
+All requests pass through normally.
+Failures are counted.
+When failures exceed a threshold (e.g., 5 consecutive failures), the breaker “opens.”
+
+Open State:
+Requests are immediately failed or redirected (no waiting for timeouts).
+After a cooldown period, the breaker moves to Half-Open.
+
+Half-Open State:
+A few test requests are allowed through.
+If they succeed → breaker closes (normal flow resumes).
+If they fail → breaker opens again.
+
+🧠 Example:
+If Order Service calls Payment Service, and Payment Service goes down, the circuit breaker (e.g., via Resilience4j)
+will stop further calls to prevent Order Service from hanging or crashing.
+
+✅ In short:
+The Circuit Breaker pattern helps make microservices resilient by stopping repeated calls to failing services,
+allowing recovery and protecting the overall system from failure.
+
+
 Definition:
 The Circuit Breaker Pattern is used to prevent cascading failures in distributed systems by temporarily halting requests
 to a failing service.
@@ -217,8 +246,42 @@ Retry a failed payment gateway request before marking it as failed.
         }
     }
 
+------------------------------------------------------------------------------------------------------------------------
+5. What is Service Discovery (Eureka)?
+Service Discovery is a mechanism that allows microservices to automatically register and locate each other
+without hardcoding service URLs.
+In Spring Cloud, Eureka (by Netflix) is a popular Service Discovery Server.
 
+⚙️ How It Works:
+Eureka Server – acts as a registry where all services register themselves with their network details (host, port, etc.).
+Eureka Client – each microservice registers with Eureka and can also discover other registered services to call them dynamically.
 
+🧠 Example:
+Order Service registers with Eureka as order-service.
+Payment Service registers as payment-service.
+When Order Service needs to call Payment Service, it asks Eureka for its location instead of using a fixed URL.
 
+✅ In short:
+Eureka Service Discovery enables dynamic registration and lookup of microservices, making the system more scalable, fault-tolerant, and flexible (no manual configuration of service endpoints).
+------------------------------------------------------------------------------------------------------------------------
+What is distributed tracing (Zipkin / Sleuth)?
+Distributed Tracing is used to track requests as they flow across multiple microservices, helping developers
+identify performance bottlenecks and failures in complex distributed systems.
+
+⚙️ Spring Cloud Sleuth
+Spring Cloud Sleuth automatically adds trace IDs and span IDs to logs for each request.
+These IDs help you trace a request across multiple services.
+Example: When a request travels from Order Service → Payment Service → Notification Service, Sleuth adds a common
+trace ID to each log.
+
+📊 Zipkin
+Zipkin is a distributed tracing server that collects, stores, and visualizes trace data sent from Sleuth-enabled applications.
+It provides a web UI to see request latency, dependency graphs, and slow services.
+
+✅ In short:
+
+Sleuth adds trace information to logs, and Zipkin visualizes that data to help monitor and debug request flows across
+ microservices.
+------------------------------------------------------------------------------------------------------------------------
 
 

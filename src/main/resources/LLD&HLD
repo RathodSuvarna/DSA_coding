@@ -1,0 +1,330 @@
+1. Java Backend & Microservices Questions
+
+Q1: Design API Gateway?
+    An API Gateway acts as the entry point for all client requests and routes them to the appropriate microservices.
+    It helps in security, authentication, load balancing, rate limiting, monitoring, and caching.
+
+    1️⃣ Key Features of an API Gateway
+    ✅ Single Entry Point → Clients call the API Gateway instead of calling microservices directly.
+    ✅ Routing & Load Balancing → Directs requests to appropriate microservices.
+    ✅ Authentication & Security → Uses JWT/OAuth2.0 for authentication.
+    ✅ Rate Limiting & Throttling → Prevents excessive API calls using Redis-based limits.
+    ✅ Monitoring & Logging → Tracks API usage with Prometheus/Grafana.
+    ✅ Caching → Uses Redis or in-memory cache for faster responses.
+
+    2️⃣ API Gateway High-Level Design (HLD)
+                            ┌───────────────────────────┐
+                            │        Client (UI/Mobile) │
+                            └──────────────┬────────────┘
+                                           │
+                                  ┌────────▼─────────┐
+                                  │    API Gateway   │  (Spring Cloud Gateway / Kong / Nginx)
+                                  └────────▲─────────┘
+                                           │
+             ┌───────────────┬─────────────┴──────────────┬───────────────────┐
+             │               │                            │                   │
+     ┌───────▼───────┐ ┌────▼───────┐             ┌──────▼───────┐     ┌───────▼──────────┐
+     │ User Service  │ │ Order Svc  │             │ Product Svc  │     │ Payment Service  │
+     │ Auth, Profile │ │ Orders CRUD│             │ Catalog API  │     │ Payment Gateway  │
+     │ PostgreSQL    │ │ MySQL      │             │ MongoDB      │     │ Razorpay, Stripe │
+     └───────────────┘ └────────────┘             └──────────────┘     └──────────────────┘
+
+
+
+Q1: How to Design a RESTful API in a Microservices Architecture?
+    When designing a RESTful API in a microservices-based system, consider:
+
+    1. Service Decomposition – Break down the application into multiple microservices.
+    2. API Gateway – Acts as a single entry point for all microservices.
+    3. Inter-Service Communication – Use REST, Webclient, or Event-driven architecture.
+    4. Security & Rate Limiting – JWT authentication, OAuth 2.0, API rate limiting.
+    5. Database Per Microservice – Each microservice should have its own database (polyglot persistence).
+    6. Observability – Use centralized logging, monitoring, and distributed tracing.
+
+Q2. How to Break Down a Monolithic Application into Microservices?
+    1. Understanding the Monolithic System
+        ✅ Current Business Domains – Identify modules like User Management, Orders, Payments, etc.
+        ✅ Database Structure – Determine how data is tightly coupled between modules.
+        ✅ Code Dependencies – Analyze code interdependencies and shared libraries.
+        ✅ Performance Bottlenecks – Identify slow, high-load areas that need scalability.
+
+Q1: How do microservices communicate?
+Answer:
+    Synchronous Calls: REST (Feign Client, WebClient).
+    Asynchronous Messaging: Kafka, RabbitMQ.
+
+Q2: How do you handle transactions across multiple microservices?
+Answer:
+    SAGA Pattern → For distributed transactions.
+    Outbox Pattern → Store event logs in DB before publishing to Kafka.
+
+Q3: How do you handle API security?
+Answer:
+    OAuth2.0 + JWT Authentication.
+    Role-Based Access Control (RBAC).
+    Rate Limiting with API Gateway.
+
+Q4: How do you handle failures in microservices?
+Answer:
+    Retry Mechanism (Resilience4j).
+    Circuit Breaker Pattern.
+    Dead Letter Queue (DLQ) in Kafka.
+
+Q5: How did you migrate from a monolith to microservices?
+Answer:
+    Used Strangler Fig Pattern to slowly replace monolithic components.
+    Decomposed DB into Polyglot Persistence (each service has its own DB).
+    Used API Gateway to expose services progressively.
+
+Q1: How would you design a microservices-based architecture for an identity management system?
+Answer:
+
+    * I would follow Domain-Driven Design (DDD) and break the system into microservices such as User Management,
+        Authentication & Authorization, Audit & Compliance, and Access Control.
+    * Each service would communicate using REST APIs.
+    * For authentication, I would integrate OAuth2.0 and JWT tokens for security.
+    * I would ensure high availability using Kubernetes and service discovery through Consul or Eureka.
+    * Event-driven architecture with Apache Kafka would ensure reliable event propagation.
+
+Q2: How do you ensure high availability and scalability in a microservices architecture?
+Answer:
+
+    * Load Balancing: Using API Gateway (e.g., Kong, Nginx) to distribute traffic.
+    * Database Scaling: Implement sharding, read replicas, and caching (Redis, Memcached).
+    * Auto-Scaling: Using Kubernetes Horizontal Pod Autoscaler (HPA).
+    * Circuit Breaker & Retry Patterns: Using Resilience4J to prevent cascading failures.
+    * Observability: Logging (ELK Stack), Tracing (Jaeger), and Monitoring (Prometheus, Grafana).
+
+ Q3: How would you optimize a slow-performing API in a Java microservices environment?
+ Answer:
+
+     * Check Database Queries: Optimize queries using indexes, partitioning, and query tuning.
+     * Caching Layer: Use Redis or CDN to cache frequent API responses.
+     * Asynchronous Processing: Offload heavy operations to Kafka, RabbitMQ, or CompletableFuture.
+     * Connection Pooling: Use HikariCP for efficient DB connections.
+     * Profiling: Use JProfiler, JVisualVM, or Spring Boot Actuator for bottleneck analysis.
+
+Q2: How do you handle concurrency in a Java application?
+Answer:
+
+    Optimistic & Pessimistic Locking for database transactions.
+    Thread-safe collections (ConcurrentHashMap, CopyOnWriteArrayList).
+    Executors Framework for thread pooling.
+    Reactive Programming (Project Reactor for non-blocking operations).
+    Synchronized Blocks & Locks (ReentrantLock, Semaphore).
+
+Q1: How do you handle API versioning in microservices?
+Answer:
+
+    URI Versioning (/v1/resource).
+    Header Versioning (Accept: application/vnd.company.app-v1+json).
+    Query Parameter Versioning (?version=1).
+    Semantic Versioning (Major.Minor.Patch).
+    Use API Gateway (Kong, Apigee) to route versions.
+    Ensure backward compatibility by deprecating APIs gracefully.
+
+Q3: How do you design an event-driven system for asynchronous processing?
+Answer:
+
+  1. Use Kafka for pub-sub messaging.
+  2. Implement Event Sourcing & CQRS.
+  3. Use SAGA Pattern for distributed transactions.
+  4. Ensure idempotency with unique event IDs.
+
+Q7: How do you handle concurrency in Java?
+Answer:
+
+  1. Use synchronized, ReentrantLock for thread safety.
+  2. Prefer ConcurrentHashMap, CopyOnWriteArrayList for collections.
+  3. Use Executors instead of manual thread creation.
+  4. Implement ForkJoinPool for parallel processing.
+
+2. Security
+
+Q1. Where to Implement Security: API Gateway vs. Microservices?
+Ans:  When implementing Authentication (AuthN) and Authorization (AuthZ) in a microservices architecture,
+      you have two options:
+
+    1. At the API Gateway (Centralized Security)
+    2. Inside Each Microservice (Distributed Security)
+    3. Hybrid (Best Approach)
+    The best approach depends on security needs, scalability, and performance.
+
+    3.  Hybrid (Best Approach):
+      A hybrid approach provides balanced security and performance:
+        1. API Gateway handles "Authentication" (OAuth2, JWT validation).
+        2. Microservices enforce fine-grained "Authorization" (Role Based Access(RBAC), ABAC).
+
+      Example Flow:
+      Client sends a request with a JWT token to the API Gateway.
+      API Gateway verifies the token (AuthN) and adds user roles in the request headers.
+      Microservices extract roles from headers and apply authorization rules (AuthZ).
+
+      final Answer:
+        "We implement authentication at the API Gateway using OAuth2/JWT to provide centralized security and performance
+        optimization.
+
+        Authorization is enforced at the microservice level to allow fine-grained access control.
+        Benefit: This hybrid approach ensures scalable and secure access management while minimizing overhead at
+                  individual services."
+
+
+
+
+
+  2. System Design Questions
+
+ Q4: How would you design a CI/CD pipeline for a microservices-based application?
+ Answer:
+
+     1. Code Commit → Developers push code to GitHub/GitLab.
+     2. Automated Build → Jenkins/GitHub Actions compiles code and runs unit tests.
+     3. Static Code Analysis → SonarQube ensures code quality.
+     4. Containerization → Build Docker images.
+     5. Security Checks → Scan images using Trivy.
+     6. Deploy to Staging → Kubernetes Helm charts deploy it to a test environment.
+     7. Automated Testing → Run integration and performance tests.
+     8. Canary Release → Deploy a small percentage to production.
+     9. Full Deployment → If no issues, gradually roll out to all users
+
+  Q5: How would you handle authentication and authorization in a SaaS-based identity management platform?
+  Answer:
+
+      1. Authentication: Use OAuth 2.0, OpenID Connect, and SAML.
+      2. Authorization: Implement RBAC (Role-Based Access Control) and ABAC (Attribute-Based Access Control).
+      3. Single Sign-On (SSO): Integrate with Okta, Azure AD, or Keycloak.
+      4. Multi-Factor Authentication (MFA): Implement TOTP, OTP, or biometric authentication.
+
+
+  3. Managerial & Behavioral Questions
+  Q6: How do you handle project deadlines in an Agile environment?
+  Answer:
+
+      I prioritize sprints and user stories using JIRA.
+      Conduct daily stand-ups to track progress.
+      If a deadline is at risk, I identify blockers early and negotiate scope adjustments.
+      I ensure the Definition of Done (DoD) is met before moving tasks forward.
+      I focus on incremental deliveries to avoid last-minute surprises.
+
+Q7: How do you resolve conflicts within a team?
+Answer:
+
+    I first listen to both parties to understand their concerns.
+    I focus on facts and data rather than personal opinions.
+    If needed, I facilitate a compromise that aligns with business goals.
+    If the conflict is technical, I suggest a POC (Proof of Concept) to validate approaches.
+    If it’s a people issue, I mediate discussions and find a mutually acceptable solution.
+
+Q8: How do you mentor junior developers?
+Answer:
+
+    I set up regular knowledge-sharing sessions.
+    I encourage pair programming and code reviews.
+    I guide them on best coding practices, design patterns, and performance tuning.
+    I involve them in architectural discussions to build their problem-solving skills.
+
+Q9: How do you handle production incidents in a high-availability system?
+Answer:
+
+    Assess the Impact – Identify affected users and services.
+    Roll Back if Necessary – Use feature flags or blue-green deployment.
+    Investigate the Root Cause – Analyze logs, traces, and metrics.
+    Fix the Issue & Deploy a Hotfix – Prioritize a quick fix without compromising security.
+    Post-Mortem Analysis – Document learnings in a RCA (Root Cause Analysis) report.
+
+Q10: What motivates you to work in a SaaS-based identity management company like Saviynt?
+Answer:
+
+    I’m passionate about identity and access management (IAM) as it plays a critical role in securing enterprises.
+    The SaaS model excites me because of its scalability and the opportunity to work on multi-tenant cloud architectures.
+    Saviynt’s focus on security, compliance, and innovation aligns with my interests in cybersecurity and cloud-native development.
+
+
+
+
+High-Level Design (HLD) Questions
+
+1. Design an E-commerce System ? How would you design an e-commerce application like Amazon or Flipkart?
+    Focus Areas:
+        Components like product catalog, cart, order management, payment, and delivery.
+        Scalability for handling high traffic.
+        Database design for storing user and product data.
+        Integration with third-party payment systems.
+
+        1. Components:
+           User Service: Handles user management (sign-up, authentication).
+           Product Service: Manages the product catalog, inventory, and pricing.
+           Cart Service: Tracks users' shopping carts.
+           Order Service: Processes orders, payments, and invoices.
+           Payment Gateway: Integrates with third-party payment providers.
+           Delivery Service: Tracks shipping and delivery.
+
+        2. Scalability:
+           Use load balancers (e.g., NGINX) to distribute traffic.
+           Cache frequently accessed data (e.g., products) using Redis.
+           Use microservices architecture for modularity and independent scaling.
+
+        3. Database:
+           Relational DB for transactions (e.g., MySQL for orders and payments).
+           NoSQL DB (e.g., MongoDB) for product catalogs and user activity.
+
+        4. Communication:
+           Use REST APIs for service communication for synchronous.
+           Add message queues (e.g., Kafka) for asynchronous tasks like notifications.
+
+        5. Security:
+           Use OAuth2/JWT for authentication.
+           Encrypt sensitive data like passwords and payment details.
+
+
+2. Design a Payment Gateway System ? How would you design a payment gateway system for processing online transactions?
+    1. Components:
+        Authentication: Verify user credentials securely.
+        Transaction Processor: Handles payment initiation and validation.
+        Fraud Detection: Detects unusual patterns to prevent fraud.
+        Notification System: Notifies users of payment success or failure.
+
+    2. Workflow:
+        User submits payment request → Request is validated → API communicates with third-party payment providers
+        (e.g., UPI, PayPal) → Updates transaction status.
+
+    3. Scalability:
+        Use stateless microservices for transaction handling.
+        Enable horizontal scaling for high traffic during sales.
+        Cache results of frequent checks (e.g., card validation) using Redis.
+
+    4. Resiliency:
+        Use Circuit Breaker Pattern to prevent cascading failures.
+        Implement retries for failed transactions.
+
+------------------------------------------------------------------------------------------------------------------------
+LLD (Low-Level Design) Questions and Answers:
+
+1. How would you design a payment service class?
+Answer:
+    Entities:
+        Payment: Represents payment details (amount, type).
+        Transaction: Tracks payment status (Pending, Success, Failed).
+        User: Links payment to a specific user.
+
+2. How would you implement an inventory management system?
+    Entities:
+        Product: Stores product details (ID, name, price).
+        Stock: Tracks inventory quantity.
+        Warehouse: Stores warehouse location and stock.
+
+
+Scenario-Based Questions
+1. How do you scale an application to handle 1 million concurrent users?
+Answer:
+    * Use load balancers (NGINX or Azure Load Balancer).
+    * Enable horizontal scaling for backend microservices using Kubernetes (AKS).
+    * Cache frequently accessed data with Redis.
+    * Use event-driven architecture with Kafka for asynchronous tasks.
+
+2. How do you ensure fault tolerance in a payment service?
+Answer:
+    * Use Circuit Breaker Pattern to handle downstream failures.
+    * Implement retry logic with exponential backoff for transient errors.
+    * Use replicated databases across multiple availability zones for high availability.
+
