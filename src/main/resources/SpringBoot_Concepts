@@ -854,23 +854,171 @@ saveAndFlush() → saves and immediately writes to the database.
 Testing
 **************
 73. What is JUnit, and what are its key annotations?
+JUnit is a Java testing framework used to write and run unit tests — small pieces of code that test individual methods or components.
+It helps developers ensure their code works as expected and supports Test-Driven Development (TDD).
+
+Key Annotations in JUnit (JUnit 5):
+
+1. @Test – Marks a method as a test case.
+@Test
+void testAddition() { ... }
+
+2. @BeforeEach – Runs before each test method (used to set up test data).
+@BeforeEach
+void setup() { ... }
+
+3.@AfterEach – Runs after each test method (used to clean up resources).
+@AfterEach
+void tearDown() { ... }
+
+4. @BeforeAll – Runs once before all tests in the class (used for one-time setup).
+@BeforeAll
+static void initAll() { ... }
+
+5. @AfterAll – Runs once after all tests (used for one-time cleanup).
+@AfterAll
+static void tearDownAll() { ... }
+
+6. @DisplayName – Gives a readable name to the test case.
+@DisplayName("Test Addition Functionality")
+
+7. @Disabled – Skips a test method temporarily.
+@Disabled("Feature under development")
+
 ========================================================================================================================
 74. What is Mockito? When would you use @Mock vs @Spy?
+Mockito is a Java testing framework used to create mock objects for unit testing.
+It allows you to simulate dependencies so that you can test your class in isolation — without relying on actual
+databases, APIs, or other services.
+
+| Annotation | Description                                                                                                                                 | When to Use                                                                                             |
+| ---------- | ------------------------------------------------------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------- |
+| **@Mock**  | Creates a **fake object** of a class — all methods return **default values (null, 0, false)** unless you define behavior using `when(...)`. | Use when you **don’t want real method logic** to run — e.g., mocking repositories or external services. |
+| **@Spy**   | Creates a **real object** but allows you to **override or stub** some methods using `when(...)`. Other methods run normally.                | Use when you want **partial mocking** — some real behavior and some mocked.                             |
+
+✅ In short:
+
+Mockito helps in unit testing by mocking dependencies.
+
+Use @Mock for complete mock objects.
+
+Use @Spy for partial mocks (some real, some fake).
 ========================================================================================================================
 75. What is @SpringBootTest vs @WebMvcTest?
+@SpringBootTest
+Loads the entire Spring application context — all beans, configurations, services, repositories, and controllers.
+Used for integration testing to verify how different layers (Controller, Service, Repository) work together.
+It’s heavier and slower since it boots the full application.
+
+@WebMvcTest
+Loads only the web layer (controllers, filters, interceptors).
+It does not load services or repositories unless you explicitly mock them.
+Used for unit testing REST controllers in isolation.
 ========================================================================================================================
 76. How do you test REST controllers with MockMvc?
+Testing REST Controllers with MockMvc
+
+MockMvc is a Spring testing tool that allows you to test REST APIs without starting the actual server.
+It simulates HTTP requests (GET, POST, PUT, DELETE) and verifies the responses — all in-memory.
+
+Steps to Test with MockMvc
+Annotate test class with @WebMvcTest (to load only the controller layer).
+Inject MockMvc to perform HTTP requests.
+Use perform() to send requests and andExpect() to verify results.
+
+Explanation:
+@WebMvcTest → loads only the web layer (controller, interceptors, etc.).
+MockMvc → simulates HTTP calls.
+@MockBean → mocks dependencies like UserService.
+andExpect() → verifies HTTP status and JSON response.
+
+✅ In short:
+MockMvc allows you to unit test REST controllers without starting a full Spring Boot server — making tests faster and isolated.
 ========================================================================================================================
 **************
 Security
 **************
 77. Authentication vs Authorization, explain with examples.
+Authentication is the process of verifying the identity of a user, i.e., confirming who the user is — for example,
+when a user logs in with a username and password.
+Authorization is the process of determining what actions or resources the authenticated user is allowed to
+ access, i.e., defining what they can do — for example, an admin can delete users, while a normal user cannot.
+
+In short:
+👉 Authentication = Who are you?
+👉 Authorization = What are you allowed to do?
 ========================================================================================================================
 78. What is Spring Security, and how does it integrate with REST APIs?
+Spring Security is a powerful framework that provides authentication, authorization, and protection against common
+security threats (like CSRF, session fixation, etc.) in Spring applications.
+
+When integrated with REST APIs, Spring Security:
+Authenticates users using mechanisms like JWT tokens, Basic Auth, or OAuth2.
+Authorizes access to endpoints using annotations like @PreAuthorize, @Secured, or configuration in SecurityFilterChain.
+Intercepts every HTTP request through a security filter chain to ensure only authorized users can access protected APIs.
 ========================================================================================================================
 79. How would you secure an endpoint with JWT tokens?
+To secure an endpoint with JWT (JSON Web Tokens) in Spring Boot:
+
+User Authentication:
+
+The user logs in using credentials (like username & password).
+
+If valid, the server generates a JWT token signed with a secret key and sends it back to the client.
+
+Client Stores Token:
+
+The client stores the JWT (usually in local storage or session storage).
+
+Authorization Using Token:
+
+For each request to a protected endpoint, the client sends the token in the Authorization header:
+Authorization: Bearer <jwt-token>
+
+JWT Validation:
+
+A JWT filter intercepts incoming requests, extracts the token, validates it (signature, expiration), and sets
+the user details in the SecurityContext.
+
+Access Control:
+
+Spring Security checks if the authenticated user has the right role or permission to access the endpoint.
+
+In short:
+Spring Boot uses a JWT filter to validate tokens and ensure that only users with valid tokens and roles can access secured REST endpoints.
 ========================================================================================================================
 80. Difference between 401 and 403 HTTP codes.\
+401 (Unauthorized) → Means the user is not authenticated.
+
+The server couldn’t verify the user’s identity because credentials are missing or invalid.
+
+Example: You try to access a resource without logging in or with an invalid token.
+
+🔹 Fix: Provide valid login credentials or a valid JWT token.
+
+403 (Forbidden) → Means the user is authenticated but not authorized.
+
+The user is logged in but doesn’t have permission to access the requested resource.
+
+Example: A normal user tries to access an admin-only endpoint.
+
+🔹 Fix: Assign proper roles or permissions.
+
+✅ In short:
+
+401 → “Who are you?” (Authentication failed or missing)
+
+403 → “You can’t do this!” (Authorization denied)
 ========================================================================================================================
 81. Git commands, Git rebase vs Merge
+Git rebase and Git merge are both used to combine changes from one branch into another, but they work differently.
+
+Git merge creates a new merge commit, preserving the full branch history — it’s safer and shows when branches diverged and merged.
+
+Git rebase, on the other hand, rewrites the commit history by placing your commits on top of another branch, making the history clean and linear.
+
+👉 In short:
+Use merge when you want to keep the original history.
+Use rebase when you want a cleaner, sequential commit history.
 ========================================================================================================================
+What is the use of SecurityFilterChain in Spring Boot 3+?

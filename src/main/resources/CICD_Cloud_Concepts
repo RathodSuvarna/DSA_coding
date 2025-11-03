@@ -1,0 +1,67 @@
+Tools, CI/CD, and Cloud
+
+1. What is Jenkins, and how does it fit in a CI/CD pipeline?
+Answer:
+Jenkins is an open-source automation server used to implement Continuous Integration (CI) and Continuous Deployment (CD).
+In a CI/CD pipeline, Jenkins automatically:
+Builds the code whenever changes are pushed to GitHub or GitLab,
+Runs automated tests (like JUnit or integration tests),
+And, if successful, deploys the build to environments like dev, QA, or production.
+This ensures faster and more reliable delivery by automating the entire development-to-deployment process.
+
+✅ In short: Jenkins automates build, test, and deployment to make software delivery faster and error-free.
+========================================================================================================================
+2. How do you configure a Git webhook to trigger a Jenkins build?
+Answer:
+To configure a Git webhook for Jenkins:
+Go to your GitHub repository → Settings → Webhooks → Add Webhook.
+Set the Payload URL to your Jenkins server’s Git endpoint, for example:
+http://<jenkins-server-url>/github-webhook/
+Choose “application/json” as the content type and select the push event trigger.
+In Jenkins, create a Freestyle or Pipeline job, enable “GitHub hook trigger for GITScm polling”,
+and connect it to your repo.
+Now, whenever code is pushed to GitHub, the webhook automatically triggers a Jenkins build.
+========================================================================================================================
+3. Explain your project’s build and deployment process.
+Answer:
+In my project, the build and deployment process is automated through Jenkins:
+Developer pushes code to the Git repository (GitHub).
+A Jenkins pipeline is triggered via a webhook.
+Jenkins executes Maven build commands (like mvn clean install) to compile and package the code.
+JUnit and Mockito tests run automatically.
+If the build passes, Jenkins creates a Docker image and pushes it to Docker Hub / ECR.
+Finally, Jenkins deploys the container to a cloud server (e.g., AWS EC2 or ECS).
+
+✅ This ensures every code change is built, tested, and deployed consistently and automatically.
+========================================================================================================================
+4. What AWS services have you used? (EC2, S3, Lambda, RDS, etc.)
+Answer:
+I’ve used several AWS services in my projects:
+EC2: To host Spring Boot microservices.
+S3: For storing files, logs, or backups.
+RDS: For relational databases like MySQL or PostgreSQL.
+CloudWatch: For monitoring metrics and application logs.
+IAM: For managing user access and permissions securely.
+ECR & ECS: For containerizing and deploying microservices using Docker images.
+
+✅ These services together helped in achieving scalable, fault-tolerant, and secure deployments.
+========================================================================================================================
+5. How do you store application secrets securely in AWS?
+Answer:
+Application secrets (like DB passwords, API keys) are stored using AWS Secrets Manager or AWS Systems Manager Parameter
+Store, not in code or configuration files.
+In the application, Spring Boot can access them dynamically using:
+spring.datasource.password=${aws.secretsmanager.db_password}
+This ensures secrets are encrypted, rotated automatically, and securely accessed at runtime using IAM roles.
+
+✅ Never hardcode credentials — always use encrypted secret stores.
+========================================================================================================================
+6. How do you monitor your application performance in production?
+Answer:
+We use AWS CloudWatch and Spring Boot Actuator for monitoring.
+CloudWatch collects metrics like CPU usage, memory, and error logs.
+Spring Boot Actuator exposes health, metrics, and custom monitoring endpoints.
+For deeper insights, we integrate ELK Stack (Elasticsearch, Logstash, Kibana) or Prometheus + Grafana dashboards to
+visualize API latency, error rates, and throughput.
+
+✅ This helps in proactive alerting, quick debugging, and improving system performance.
