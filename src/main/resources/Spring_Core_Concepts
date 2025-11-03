@@ -90,20 +90,19 @@ A POJO (Plain Old Java Object) is a simple Java class that holds data and can al
 A DTO (Data Transfer Object) is a lightweight object used only to carry data between layers or services.
 
 2. How is POJO and DTO are different from Spring bean?
-A Spring Bean is any object managed by the Spring IoC container (with lifecycle, scope, and dependency
-injection).
+A Spring Bean is any object managed by the Spring IoC container (with lifecycle, scope, and dependency injection).
 POJOs/DTOs are just plain data holders, not managed by Spring unless explicitly registered as beans.
 
 3. When will you get NoSuchBeanException even though there is bean?
  If package scanning is wrong, Spring won’t even see our class, so it never creates the bean.
- If we use a wrong qualifier name, Spring looks for a bean with that exact name, can’t find it, and
-throws the exception.
- If the bean is marked with a Profile or Condition, but that profile isn’t active or the condition
-fails, Spring will skip creating the bean.
+ If we use a wrong qualifier name, Spring looks for a bean with that exact name, can’t find it, and throws the exception.
+ If the bean is marked with a Profile or Condition, but that profile isn’t active or the condition fails, Spring will skip 
+creating the bean.
 ========================================================================================================================
 5. Difference between ApplicationContext and BeanFactory.
 “Both BeanFactory and ApplicationContext are IoC containers in Spring.
-BeanFactory provides basic bean management and uses lazy loading, while ApplicationContext builds on top of it and provides additional enterprise features like event handling, AOP, and internationalization.
+BeanFactory provides basic bean management and uses lazy loading, while ApplicationContext builds on top of it and provides 
+additional enterprise features like event handling, AOP, and internationalization.
 In modern Spring applications, ApplicationContext is preferred because it is more powerful and convenient.”
 
 What is IOC Container?
