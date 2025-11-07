@@ -78,6 +78,14 @@ A single bean instance per ServletContext. It is shared across the whole web app
 When to use: For application-wide shared resources, like configuration objects, caches, or global
 services.
 
+What is bean and how it is created?
+A Spring Bean is an object that is managed by the Spring IoC container.
+It is created, configured, and injected by Spring rather than manually in code.
+Beans can be defined using:
+@Component, @Service, @Repository, @Controller annotations
+@Bean inside a @Configuration class
+(or XML in legacy apps)
+
 What is Spring Bean
  A java class which is managed by the IOC container is called as Spring Bean. The life cycle of the
 spring bean is taken care by the IOC container.
@@ -193,8 +201,7 @@ retired (destroyed). The IOC container manages all of this.
 Note: There are many life cycle methods but here I am mentioning only the important. We can read
 from the link below and check all the methods in the image
 1. Instantiation (Bean is created)
-factory method.
-The Spring container creates an object of the class. Usually, it calls the no-arg constructor or a
+The Spring container creates an object of the class. Usually, it calls the no-arg constructor or a factory method.
 
 2. Populating Properties (Dependency Injection)
 After creating the bean instances, Spring injects all the dependencies (other beans or values)
@@ -211,6 +218,15 @@ Used for cleanup (closing DB connections, releasing resources).
 Prevents memory leaks by properly releasing resources.
 ========================================================================================================================
 10. How do you define beans in XML vs using annotations?
+In Spring, beans can be defined in two ways:
+1️⃣ XML-based Configuration:
+Use <bean> tags inside applicationContext.xml to define beans and their dependencies manually.
+
+2️⃣ Annotation-based Configuration:
+Use annotations like @Component, @Service, or @Bean inside a @Configuration class.
+Spring automatically detects these beans using component scanning.
+
+Modern Spring Boot projects use annotation-based configuration — XML is mostly used in legacy applications.
 ========================================================================================================================
 11. Explain AOP (Aspect Oriented Programming).
 AOP is a programming technique where we separate cross-cutting concerns from the main business

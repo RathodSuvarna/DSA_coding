@@ -1,0 +1,343 @@
+1. What is Java Collection  Framework?
+Java Collection Framework is a  framework which provides some predefined classes and interfaces to store and manipulate
+ the group of objects. Using Java collection framework, you can store the objects as a List or as a Set or as a Queue
+ or as a Map and perform basic operations like adding, removing, updating, sorting, searching etc.. with ease.
+========================================================================================================================
+2. What is get() method in HashMap?
+The get() method in HashMap is used to retrieve the value associated with a specific key.
+If the key exists, it returns the corresponding value.
+If the key does not exist, it returns null.
+
+V get(Object key)
+
+V → type of value stored in the map
+key → key whose value you want to retrieve
+
+1️⃣ put(K key, V value)
+Adds or updates a key–value pair in the map.
+If the key already exists, put() replaces the old value and returns the previous value; otherwise, it returns null.
+
+3️⃣ remove(Object key)
+Removes the entry for the specified key.
+It returns the value of the removed key, or null if the key didn’t exist.
+
+4️⃣ containsKey(Object key)
+Checks if the map contains a mapping for the given key.
+
+5️⃣ containsValue(Object value)
+Checks if the map contains a specific value.
+
+8️⃣ clear()
+Removes all key–value pairs from the map.
+
+9️⃣ keySet()
+Returns a Set of all keys in the map.
+
+🔟 values()
+Returns a Collection of all values in the map.
+
+1️⃣1️⃣ entrySet()
+Returns a Set of all key–value pairs (Map.Entry objects).
+Useful for iterating over the map.
+
+1️⃣2️⃣ getOrDefault(Object key, V defaultValue)
+Returns the value for the key, or a default value if the key doesn’t exist.
+
+1️⃣5️⃣ forEach(BiConsumer action) (Java 8)
+Iterates through all entries using lambda expressions.
+========================================================================================================================
+3. What is the difference between List, Set, and Map?
+A List stores elements in order and allows duplicates (e.g., ArrayList, LinkedList).
+A Set stores unique elements and does not allow duplicates (e.g., HashSet, TreeSet).
+A Map stores data as key-value pairs, where keys are unique (e.g., HashMap, TreeMap).
+========================================================================================================================
+4. What is the difference between ArrayList and LinkedList?
+ArrayList uses a dynamic array internally; it is faster for random access but slower for insertions and deletions
+in the middle.
+LinkedList uses a doubly linked list internally; it is faster for insertions and deletions but slower for random access.
+
+Example:
+Use ArrayList when you mostly read data, and LinkedList when you frequently insert or remove elements.
+========================================================================================================================
+5. What is the difference between HashSet and TreeSet?
+HashSet stores elements in an unordered manner and allows one null value.
+TreeSet stores elements in sorted order and does not allow nulls.
+Also, TreeSet is slower because it uses a Red-Black tree internally.
+========================================================================================================================
+6. What is the difference between HashMap and Hashtable?
+Map stores the data in the form of key-value pairs where each key is associated with a value.
+Map interface is part of Java collection  framework but it doesn’t inherit Collection interface.
+
+HashMap is not synchronized and allows one null key and multiple null values.
+Hashtable is synchronized, which means thread-safe but slower, and it does not allow null keys or values.
+HashMap is preferred in modern applications.
+========================================================================================================================
+7. How does HashMap work internally?
+A HashMap stores key-value pairs in buckets based on the key’s hashCode().
+When you put a key-value pair, it calculates the hash, finds the right bucket, and adds it there.
+If two keys have the same hash, it uses a linked list or tree (since Java 8) to store them in the same bucket.
+When retrieving, it compares the key using equals() to return the correct value.
+
+========================================================================================================================
+8. Why do we override hashCode() and equals()?
+Because HashMap uses hashCode() to find the bucket and equals() to compare keys inside the bucket.
+If they’re not overridden properly, keys might not be found or may duplicate unexpectedly.
+========================================================================================================================
+9. What is the difference between fail-fast and fail-safe iterators?
+Fail-fast iterators (like those in ArrayList, HashMap) throw ConcurrentModificationException if the collection is
+modified while iterating.
+Fail-safe iterators (like ConcurrentHashMap, CopyOnWriteArrayList) work on a clone of the collection, so they don’t
+throw an exception.
+========================================================================================================================
+10. What is the difference between Comparable and Comparator?
+Comparable is used for natural ordering, and the comparison logic is defined inside the class using compareTo().
+Comparator is used for custom ordering, defined outside the class using compare().
+Example: Comparable for sorting Employees by ID, Comparator for sorting by name or salary.
+========================================================================================================================
+11. What is the difference between Iterator and ListIterator?
+Iterator allows traversal only in the forward direction and supports remove().
+ListIterator allows both forward and backward traversal, and supports add(), remove(), and set().
+ListIterator works only with lists.
+========================================================================================================================
+12. How can you make a collection thread-safe?
+You can make collections thread-safe by:
+Using synchronized wrappers:
+
+List list = Collections.synchronizedList(new ArrayList<>());
+
+Or using concurrent collections such as ConcurrentHashMap and CopyOnWriteArrayList.
+========================================================================================================================
+13. What is the difference between ArrayList and Vector?
+List :
+List is a sequential collection of objects.
+Elements are positioned using zero-based index.
+Elements can be inserted or removed or retrieved from any arbitrary position using an integer index.
+
+
+Both use dynamic arrays, but Vector is synchronized and thus slower.
+ArrayList is not synchronized and performs better in single-threaded applications.
+Vector doubles its size when full, while ArrayList increases by 50%.
+========================================================================================================================
+14. How does ConcurrentHashMap work internally?
+ConcurrentHashMap divides the map into segments (in Java 7) or uses fine-grained locking and CAS (in Java 8) to allow
+concurrent read and write operations.
+It doesn’t lock the entire map, making it thread-safe and high-performance.
+========================================================================================================================
+15. What is a PriorityQueue?
+A PriorityQueue orders elements by their natural order or by a custom Comparator.
+The smallest (or highest priority) element is always at the head of the queue.
+
+It internally uses re-sizable array to store the elements and a Comparator to place the elements in some specific order.
+========================================================================================================================
+16. What is LinkedHashMap and why is it used?
+Elements are stored as Nodes where each node consists of three parts – Reference To Previous Element, Value Of
+The Element and Reference To Next Element.
+LinkedHashMap maintains insertion order of elements, unlike HashMap.
+It’s useful when you need predictable iteration order, such as implementing LRU cache.
+========================================================================================================================
+17. When to use which Collection?
+For fast search and insert → use HashMap or HashSet.
+For maintaining order → use LinkedHashMap or List.
+For sorted data → use TreeSet or TreeMap.
+For multi-threaded access → use ConcurrentHashMap or CopyOnWriteArrayList.
+========================================================================================================================
+
+========================================================================================================================
+
+========================================================================================================================
+
+========================================================================================================================
+
+========================================================================================================================
+
+========================================================================================================================
+
+========================================================================================================================
+Java Collections Hierarchy :
+All the classes and interfaces related to Java collections are kept in java.util package. List, Set, Queue and Map are
+four top level interfaces of Java collection framework. All these interfaces (except Map) are the sub interfaces of
+java.util.Collection interface.
+
+Let’s see these primary interfaces one by one.
+List :
+List is a sequential collection of objects.
+Elements are positioned using zero-based index.
+Elements can be inserted or removed or retrieved from any arbitrary position using an integer index.
+
+Popular Implementations :
+ArrayList, Vector And LinkedList
+
+Internal Structure :
+ArrayList : Internally uses re-sizable array which grows or shrinks as we add or delete elements.
+Vector : Same as ArrayList but it is synchronized.
+LinkedList : Elements are stored as Nodes where each node consists of three parts – Reference To Previous Element, Value Of The Element and Reference To Next Element.
+
+Null Elements :
+ArrayList : Yes
+Vector : Yes
+LinkedList : Yes
+
+Duplicate Elements :
+ArrayList : Yes
+Vector : Yes
+LinkedList : Yes
+
+Order Of Elements :
+ArrayList : Insertion Order
+Vector : Insertion Order
+LinkedList : Insertion Order
+
+Synchronization :
+ArrayList : Not synchronized
+Vector : Synchronized
+LinkedList : Not synchronized
+Performance :
+
+ArrayList :
+Insertion : O(1) (if insertion causes restructuring of internal array, it will be O(n))
+Removal : O(1) (if removal causes restructuring of internal array, it will be O(n))
+Retrieval : O(1)
+Vector : Similar to ArrayList but little slower because of synchronization.
+LinkedList : Insertion -> O(1), Removal -> O(1), Retrieval -> O(n)
+
+When to use?
+ArrayList : Use it when more search operations are needed then insertion and removal.
+Vector : Use it when you need synchronized list.
+LinkedList : Use it when insertion and removal are needed frequently.
+========================================================================================================================
+Queue :
+Queue is a data structure where elements are added from one end called tail of the queue and elements are removed from another end called head of the queue.
+Queue is typically FIFO (First-In-First-Out) type of data structure.
+
+Popular Implementations :
+PriorityQueue, ArrayDeque and LinkedList (implements List also)
+
+Internal Structure :
+PriorityQueue : It internally uses re-sizable array to store the elements and a Comparator to place the elements in some specific order.
+ArrayDeque : It internally uses re-sizable array to store the elements.
+
+Null Elements :
+PriorityQueue : Not allowed
+ArrayDeque : Not allowed
+
+Duplicate Elements :
+PriorityQueue : Yes
+ArrayDeque : Yes
+Order Of Elements :
+
+PriorityQueue : Elements are placed according to supplied Comparator or in natural order if no Comparator is supplied.
+ArrayDeque : Supports both LIFO and FIFO
+
+Synchronization :
+PriorityQueue : Not synchronized
+ArrayDeque : Not synchronized
+
+Methods :
+PriorityQueue : add(), offer(), remove(), poll(), element(), peek(), clear(), comparator(), iterator(), forEach(),
+contains(), spliterator()
+ArrayDeque : add(), addAll(), addFirst(), addLast(), getFirst(), getLast(), offer(), offerFirst(), offerLast(),
+peek(), poll(), pop(), push(), contains(), remove(), removeAll(), removeFirst(), removeFirstOccurrence(),
+removeLast(), removeLastOccurrence(), removeIf(), size(), clear(), isEmpty(), iterator(), spliterator().
+
+Performance :
+PriorityQueue : Insertion -> O(log(n)), Removal -> O(log(n)), Retrieval -> O(1)
+ArrayDeque : Insertion -> O(1) , Removal -> O(n), Retrieval -> O(1)
+
+When to use?
+PriorityQueue : Use it when you want a queue of elements placed in some specific order.
+ArrayDeque : You can use it as a queue OR as a stack.
+========================================================================================================================
+Set :
+Intro :
+Set is a linear collection of objects with no duplicates.
+Set interface does not have it’s own methods. All it’s methods are inherited from Collection interface. It just applies
+ restriction on methods so that duplicate elements are always avoided.
+
+Popular Implementations :
+HashSet, LinkedHashSet and TreeSet
+
+Internal Structure :
+HashSet : Internally uses HashMap to store the elements.
+LinkedHashSet : Internally uses LinkedHashMap to store the elements.
+TreeSet : Internally uses TreeMap to store the elements.
+
+Null Elements :
+HashSet : Maximum one null element
+LinkedHashSet : Maximum one null element.
+TreeSet : Doesn’t allow even a single null element
+
+Duplicate Elements :
+HashSet : Not allowed
+LinkedHashSet : Not allowed
+TreeSet : Not allowed
+
+Order Of Elements :
+HashSet : No order
+LinkedHashSet : Insertion order
+TreeSet : Elements are placed according to supplied Comparator or in natural order if no Comparator is supplied.
+
+Synchronization :
+HashSet : Not synchronized
+LinkedHashSet : Not synchronized
+TreeSet : Not synchronized
+
+Methods :
+add(), addAll(), remove(), removeAll(), contains(), containsAll(), retainAll(), size(), clear(), isEmpty(), iterator(),
+ spliterator(), toArray(), copyOf(), of()
+
+Performance :
+HashSet : Insertion -> O(1), Removal -> O(1), Retrieval -> O(1)
+LinkedHashSet : Insertion -> O(1), Removal -> O(1), Retrieval -> O(1)
+TreeSet : Insertion -> O(log(n)), Removal -> O(log(n)), Retrieval -> O(log(n))
+
+When to use?
+HashSet : Use it when you want only unique elements without any order.
+LinkedHashSet : Use it when you want only unique elements in insertion order.
+TreeSet : Use it when you want only unique elements in some specific order.
+========================================================================================================================
+Map :
+Map stores the data in the form of key-value pairs where each key is associated with a value.
+Map interface is part of Java collection  framework but it doesn’t inherit Collection interface.
+
+Popular Implementations :
+HashMap, LinkedHashMap And TreeMap
+
+Internal Structure :
+HashMap : It internally uses an array of buckets where each bucket internally uses linked list to hold the elements.
+LinkedHashMap : Same as HashMap but it additionally uses a doubly linked list to maintain insertion order of elements.
+TreeMap : It internally uses Red-Black tree.
+Null Elements :
+
+HashMap : Only one null key and can have multiple null values.
+LinkedHashMap : Only one null key and can have multiple null values.
+TreeMap : Doesn’t allow even a single null key but can have multiple null values.
+
+Duplicate Elements :
+HashMap : Doesn’t allow duplicate keys but can have duplicate values.
+LinkedHashMap : Doesn’t allow duplicate keys but can have duplicate values.
+TreeMap : Doesn’t allow duplicate keys but can have duplicate values.
+
+Order Of Elements :
+HashMap : No Order
+LinkedHashMap : Insertion Order
+TreeMap : Elements are placed according to supplied Comparator or in natural order of keys if no Comparator is supplied.
+
+Synchronization :
+HashMap : Not synchronized
+LinkedHashMap : Not Synchronized
+TreeMap : Not Synchronized
+
+Methods :
+put(), putAll(), putIfAbsent(), get(), getOrDefault(), remove(), containsKey(), containsValue(), keySet(), values(),
+entrySet(), size(), isEmpty(), clear(), compute(), computeIfAbsent(), computeIfPresent(), forEach(), merge(), replace(), replaceAll()
+
+Performance :
+HashMap : Insertion -> O(1), Removal -> O(1), Retrieval -> O(1)
+LinkedHashMap : Insertion -> O(1), Removal -> O(1), Retrieval -> O(1)
+TreeMap : Insertion -> O(log(n)), Removal -> O(log(n)), Retrieval -> O(log(n))
+
+When to use?
+HashMap : Use it if you want only key-value pairs without any order.
+LinkedHashMap : Use it if you want key-value pairs in insertion order.
+TreeMap : Use it when you want key-value pairs sorted in some specific order.
+

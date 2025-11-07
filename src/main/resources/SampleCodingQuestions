@@ -1,0 +1,17 @@
+Sample Coding Questions:
+
+Find duplicate elements in an array / list.
+
+Count occurrences of each character in a string.
+
+Reverse words in a sentence.
+
+Find first non-repeated character in a string.
+
+Find highest occurring element in an array.
+
+Implement custom sorting using Comparator / lambda.
+
+Use Stream API to filter, map, or group data.
+
+Given a list of employees, group them by department and find average salary (Stream question).

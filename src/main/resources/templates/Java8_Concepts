@@ -1,0 +1,283 @@
+1. What are default methods and why are they are introduced?
+Before Java 8, interfaces can only have abstract methods. So, if we add a new method to an interface,
+every class that implemented it has to override that method, or we will get a compile-time error.
+To fix this, Java introduced default methods. Now, when we add a new method to an interface, we can
+also provide a default implementation. In this way, existing classes won’t break, they can either use the
+default or choose to override it.
+========================================================================================================================
+2. Why Java 8 introduced static methods to the Interfaces?
+Java 8 introduced static methods in interfaces to allow developers to define utility or helper methods directly within the interface, keeping related behavior together and avoiding the need for separate utility classes.
+These methods belong to the interface itself and are not inherited by implementing classes.
+========================================================================================================================
+3. What is optional and it uses? When should you NOT use it?
+Let’s say we are calling a method and we are not sure if it'll return a value or null. Before Java 8,
+We had to check whether the value is null or not if not, there is high chance of getting
+NullPointerException.
+Optional is a container that may or may not hold a non-null value. It is used to clearly show that
+a method might not return a result. Instead of returning null, the method returns an Optional to help
+avoid NullPointerException and make the code safer and easier to understand.
+Example: In the below example, if user is null, user.getName() will throw NullPointerException.
+
+String getName(User user) {
+  return user.getName();
+}
+Now from Java 8, instead of returning String we will return Optional<String> which tells that , this may
+contain null and should be handled.
+
+Optional<String> getName(User user) {
+return Optional.ofNullable(user.getName());
+}
+String name = getName(user).orElse("Anonymous"); //If user is null it returns ‘No User’
+========================================================================================================================
+4. What is functional interface ?
+Functional interface: A functional interface is an interface that contains exactly one abstract method,
+although it can also contain multiple default or static methods. The presence of a single abstract
+method allows instances of functional interfaces to be created with lambda expressions.
+@FunctionalInterface
+public interface MyFunctionalInterface {
+void execute();
+}
+This interface has only one abstract method, execute, making it a functional interface.
+Functional interfaces are used extensively with lambda expressions. A lambda expression provides a
+clear and concise way to implement the single abstract method of a functional interface. Here is how we
+can implement the MyFunctionalInterface using a lambda expression
+MyFunctionalInterface myFunc = () -> System.out.println("Executing...");
+myFunc.execute();
+========================================================================================================================
+5. Explain different types of functional interfaces?
+1. Consumer: This interface represents an operation that accepts a single input argument and returns no
+result. It is used when an action needs to be performed on an object without producing a return value.
+Example: forEach()
+@FunctionalInterface
+public interface Consumer<T> {
+void accept(T t);
+}
+
+2. Supplier: This interface represents a supplier of results. It takes no arguments and returns a value of a
+specified type. It is used when a value needs to be generated or retrieved. Example: Optional.orElseGet
+@FunctionalInterface
+public interface Supplier<T> {
+T get();
+}
+
+3. Predicate: A Predicate is a functional interface that represents an operation that takes an input of type
+   `T` and returns a boolean result. Example: filter()
+   @FunctionalInterface
+   public interface Predicate<T> {
+   boolean test(T t);
+   }
+4. Function: This interface represents a function that accepts one argument and produces a result. It is
+used for transforming an input value into an output value of a potentially different type. Example: map()
+ @FunctionalInterface
+ public interface Function<T, R> {
+ R apply(T t);
+ }
+========================================================================================================================
+ 6. Explain about Lambda expression?
+ A Lambda Expression in Java 8 is a short block of code that represents a function.
+ It allows you to treat behavior as a method argument or pass functionality as data, rather than writing separate classes.
+ Lambdas work with functional interfaces and make code more concise, readable, and functional.
+
+ Syntax: (parameters) -> expression
+
+ Before Java 8, if we want to do something simple, filter a list, or run some code in a new
+ thread we had to write a lot of code using anonymous inner classes.
+ Java 8 changed this by introducing the idea that functions can be first-class citizens. That means
+ functions can be treated just like variables, we can pass them around, store them, and return them from
+ methods.
+
+A Lambda Expression is a short way to write anonymous functions (functions without a name).
+It lets you treat behavior as data — you can pass it around just like an object.
+💡 In simple words:
+It’s a shortcut for implementing functional interfaces (interfaces with only one abstract method).
+
+ Lambda expressions in Java 8 provide a way to represent functions as objects.
+ They make it easy to pass behavior into methods — especially for functional interfaces (one abstract method).
+
+ Syntax: (parameters) -> expression
+ Example:
+========================================================================================================================
+7. Explain about Method references and uses?
+Method Reference is a shortcut for writing a lambda expression that calls an existing method.
+It is used to refer to a method by its name, instead of writing the full lambda.
+
+A Method Reference in Java 8 is a shorthand notation for a lambda expression that calls an existing method.
+It uses the :: operator to refer to methods or constructors directly.
+It makes the code more concise and readable by avoiding unnecessary lambda syntax.
+
+Types:
+1️⃣ Static method reference — ClassName::staticMethod  ex: Math::max
+2️⃣ Instance method reference — object::instanceMethod  ex: printer::print
+3️⃣ Arbitrary object’s instance method — ClassName::instanceMethod  ex: String::toUpperCase
+4️⃣ Constructor reference — ClassName::new   ex: ArrayList::new
+========================================================================================================================
+8. What is the Stream API in Java 8?
+The Stream API in Java 8 is used to process collections of data in a declarative and functional way.
+It allows performing operations like filtering, mapping, sorting, reducing, and collecting without writing loops.
+
+Before Java 8, we used to write long for-loops to filter, map, or collect data.
+Streams are introduced in Java 8. Streams make the code shorter, readable, and more
+declarative; they provide a functional and efficient way to process collections by creating a pipeline of
+operations. They enable declarative programming, lazy evaluation, and parallel processing without
+modifying the original data source.
+
+1. Lazy Evaluation -> Stream operations don’t execute until a terminal operation like collect or forEach is called.
+2. Parallel Processing -> parallel streams split data into chunks and process them across multiple threads for better performance.
+3. Immutable Flow -> Water in the pipeline doesn’t affect the water tank. Similarly, a Java Stream doesn’t
+   modify the original collection; instead, it produces a transformed result.
+
+It provides various operators to process the data. They can be segregated like
+Source Operators:
+This is where the stream starts. We can turn a list, array, or even lines from a file into a stream.
+Example: List.of(1,2,3).stream() or Files.lines(path)
+
+Intermediate Operators:
+These are the steps in the middle. They transform the stream but don’t run until a terminal operation is
+called (this is called lazy evolution).
+Example: .filter(n -> n % 2 == 0).map(n -> n * 2)
+
+Short-Circuit Operators:
+These stop the stream early when a condition is met. Useful when we don’t need to process the entire stream.
+Example: .limit(5), .anyMatch(x -> x > 100)
+
+Terminal Operators:
+These are the end of the stream. Once we call a terminal operation, everything runs and gives us a result like a
+list, count, sum, etc.
+Example: .collect(toList()), .count(), .forEach(System.out::println)
+========================================================================================================================
+9. Can you list of streams operators you have used or you know?
+   1. Source Operators: Create a stream from a collection, array, or I/O source.
+   • stream() – Converts a collection into a sequential stream.
+   • parallelStream() – Creates a parallel stream for multi-threading.
+   • Stream.of() – Generates a stream from given values.
+   • Arrays.stream() – Converts an array into a stream.
+   • IntStream.range() – Creates a stream of numbers within a range.
+   • BufferedReader.lines() – Converts lines of a file into a stream.
+
+   2. Intermediate Operators: Transform or filter data without executing immediately (lazy evaluation).
+   • filter() – Selects elements that match a given condition.
+   • map() – Transforms each element using a function.
+   • flatMap() – Flattens nested structures into a single stream.
+   • distinct() – Removes duplicate elements from the stream.
+   • sorted() – Sorts elements in natural or custom order.
+   • limit(n) – Restricts the stream to the first n elements.
+   • skip(n) – Skips the first n elements in the stream.
+   • peek() – Used for debugging without modifying elements.
+
+   3. Terminal Operators: Trigger execution and produce a final result, consuming the stream.
+   • collect() – Converts a stream into a List, Set, or Map.
+   • forEach() – Performs an action for each element.
+   • count() – Returns the number of elements in the stream.
+   • findFirst() – Retrieves the first element of the stream.
+   • findAny() – Retrieves any element from the stream.
+   • reduce() – Aggregates elements into a single result.
+   • toArray() – Converts stream elements into an array.
+
+   4. Short-Circuiting Operators: Stop execution early when a condition is met for better performance.
+   • anyMatch() – Returns true if any element matches a condition.
+   • allMatch() – Returns true if all elements match a condition.
+   • noneMatch() – Returns true if no elements match a condition.
+   • limit(n) – Stops processing after selecting n elements.
+   • findFirst() – Retrieves the first element and stops further operations.
+========================================================================================================================
+10. Difference between Streams and Collections?
+Collections, like List, Set, and Map are used hold the data. It is like a container. We can add the
+items, retrieve the items and update them. They will be saved in memory.
+
+Streams are different from collections. Streams don't store anything. They just describe how data should
+be processed. We don’t add or remove things from a Stream. We just say, ‘take this list, filter out the
+even numbers, map each number to its square, and collect the result.’
+
+The important difference is, Streams are lazy. They don’t do anything until we tell them to finish, we
+usually do with a terminal operation like .collect() or .forEach().
+
+Let’s say we have a list of 1000 numbers. With a Collection, we already have all those numbers in
+memory. With a Stream, nothing really happens until we start processing them.
+========================================================================================================================
+11. Difference between map and flatMap?
+The map() method transforms each element of a stream into another object. It takes a Function as
+an argument, which defines the transformation logic. This function is applied to each stream element,
+and the result is collected into a new stream.
+
+List<String> names = Arrays.asList("Suvarna", "Roshan", "Mohan");
+
+List<Integer> nameLengths = names.stream()
+                                 .map(String::length)
+                                 .collect(Collectors.toList());
+
+System.out.println(nameLengths);
+
+
+The flatMap() method takes each element in the stream, applies a function to it, and that function
+returns another stream (could have 0, 1, or many elements).Then, flatMap() takes all those small
+streams and joins them into one big stream.
+
+List<List<String>> namesList = Arrays.asList(
+    Arrays.asList("Suvarna", "Roshan"),
+    Arrays.asList("Mohan", "Kiran")
+);
+
+List<String> flatMapped = namesList.stream()
+                                   .flatMap(List::stream)
+                                   .collect(Collectors.toList());
+
+System.out.println(flatMapped);
+
+========================================================================================================================
+12. forEach vs collect()?
+collect()
+ It collects the processed stream into a data structure (like a List, Set, or Map)
+ It returns that data structure
+ We use it when we want to store or reuse the results
+forEach()
+ It goes through each item and performs an action (like printing or logging)
+ It returns nothing (void)
+ We use it for side effects, not for building data
+
+What is parallelStream()?
+parallelStream() in Java 8 is used to process elements of a stream in parallel, leveraging multiple CPU cores.
+It divides the stream into substreams, processes them concurrently using the ForkJoinPool, and then merges the results.
+It can improve performance for large, CPU-intensive operations, but should be used carefully since it can cause
+thread-safety and ordering issues if used improperly.
+========================================================================================================================
+44. Why are streams preferred over loops in some cases?
+========================================================================================================================
+45. Differences Intermediate and terminal operators.
+========================================================================================================================
+46. Practice the coding questions on filter, map, groupigBy, max, sort
+========================================================================================================================
+47. Difference between sequential and parallel streams.
+========================================================================================================================
+48. How does reduce() work?
+========================================================================================================================
+49. Explain Collectors.groupingBy().
+========================================================================================================================
+50. How does lazy evaluation work in streams?
+========================================================================================================================
+51. Difference between map() and peek().
+========================================================================================================================
+52. How to remove duplicates using streams?
+========================================================================================================================
+53. How to join a list of strings into one string with delimiter?
+========================================================================================================================
+54. How do streams work with primitive types (IntStream, LongStream)?
+========================================================================================================================
+13. What is a Functional Interface? Can you give examples from Java libraries?
+========================================================================================================================
+14. Difference between Lambda expressions and Anonymous classes.
+========================================================================================================================
+15. Stream API ; explain intermediate vs terminal operations.
+========================================================================================================================
+16. map() vs flatMap() , when do you use each?
+========================================================================================================================
+17. How would you find the 2nd highest salary in a list of employees using Streams?
+========================================================================================================================
+18. Optional, what problems does it solve? When should you NOT use it?
+========================================================================================================================
+19. Stream pipelines, how do they work under the hood?
+========================================================================================================================
+20. Parallel Streams, when should you use them, and when should you avoid them?
+========================================================================================================================
+21. What is flatMap() used for in real scenarios?
+========================================================================================================================
+22. Explain how stream pipeline works internally.

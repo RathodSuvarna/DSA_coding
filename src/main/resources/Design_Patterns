@@ -12,11 +12,13 @@ S: Single Responsibility Principle
 
 O: Open-Closed Principle
     Code should be open for extension but closed for modification.
+    You shouldn’t change existing class code to add new behavior.
     Example: I used interfaces for payment methods, so adding new methods (like UPI or wallet) required creating a
     new implementation, not modifying existing classes.
 
 L: Liskov Substitution Principle
     Subtypes should be substitutable for their base types.
+    Subclasses should be replaceable for their parent classes without breaking functionality.
     if we have piece of code work with parent class it should work with any sub class of that parent class without
     requiring changes or unexpected behavior .
     Example: I ensured CreditCardPayment and DebitCardPayment both adhered to a Payment interface without breaking
@@ -52,6 +54,9 @@ Ans: 	The Singleton Pattern ensures that a class has only one instance and provi
 3. What is a Factory Pattern?
    Answer: The Factory Pattern provides an interface for creating objects but allows subclasses to alter the type of
    objects that will be created. It helps promote loose coupling.
+
+   The Factory Pattern is a design pattern used to create objects without using the new keyword directly.
+   Instead, you call a factory method, which decides which object to create and return.
 
    Implementation:
    public interface Shape {

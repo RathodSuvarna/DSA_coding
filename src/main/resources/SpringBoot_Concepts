@@ -37,6 +37,21 @@ package of annotated class and its sub-packages.
  @Configuration: This annotation configures the beans and packages in the class path.
 So, using @SpringBootApplication at the main class makes the application ready with all these features
 at once.
+
+1️⃣ @Configuration
+Indicates that the class can be used by the Spring IoC container as a source of bean definitions.
+
+✅ 2️⃣ @EnableAutoConfiguration
+Tells Spring Boot to automatically configure beans based on the classpath dependencies.
+if Spring Web dependency (spring-boot-starter-web) is on your classpath → Boot automatically configures an
+embedded Tomcat server and DispatcherServlet.
+If Spring Data JPA is present → Boot auto-configures a DataSource and EntityManagerFactory.
+So you don’t have to manually configure everything — Boot does it automatically.
+
+✅ 3️⃣ @ComponentScan
+Tells Spring to scan the current package and sub-packages for beans annotated with
+@Component, @Service, @Repository, and @Controller.
+💡 It automatically registers those classes as beans in the Spring Application Context.
 ========================================================================================================================
 3. What is dependency injection, and how does @Autowired help?
 Dependency injection is a design pattern where objects don’t create their own dependencies.
