@@ -1,29 +1,47 @@
 package com.learn.DSA_coding.InterviewCode;
 
-
-import java.util.HashMap;
+import java.sql.SQLOutput;
+import java.util.LinkedHashMap;
+import java.util.Map;
+import java.util.function.Function;
+import java.util.stream.Collectors;
 
 public class LeastNoOfCoccurance {
     public static void main(String[] args) {
         String word = "aaddbaaadcc";
-        leastNoOCuurance(word);
-    }
+      //1.  without Java 8
 
-    private static void leastNoOCuurance(String input){
-     HashMap<Character, Integer> map = new HashMap<>();
-     int count =1;
-     for(int i=1; i<input.length(); i++){
-         if(input.charAt(i) == input.charAt(i-1)){
-             count ++;
-         }else{
-             char ch = input.charAt(i-1);
-             map.put(ch, Math.min(map.getOrDefault(ch, Integer.MAX_VALUE), count));
-             count = 1;
-         }
-     }
-     char lastCh = input.charAt(input.length()-1);
-     map.put(lastCh, Math.min(map.getOrDefault(lastCh, Integer.MAX_VALUE), count));
-     map.forEach((Key, Value) -> System.out.println(Key +":" + Value));
+        LinkedHashMap<Character, Integer> countMap = new LinkedHashMap<>(); // Create map to store charecter and occurance
+
+        for(char ch : word.toCharArray()){  //Conert string to char Array and itterate
+            countMap.put(ch, countMap.containsKey(ch)? countMap.get(ch)+1: 1);
+        }
+
+        int minCount = Integer.MAX_VALUE;  //Find the minimum occurrence value
+        for(int num : countMap.values()){
+            if(num < minCount)
+                minCount = num;
+        }
+
+        for(Map.Entry<Character, Integer> result : countMap.entrySet() ){  // Print characters having that minimum occurrence
+            if(result.getValue() == minCount){
+                System.out.println(" charecter " + result.getKey() + " : " + "occurance" + result.getValue() );
+            }
+        }
+
+        // 2. using java 8
+        Map<Character, Long>  newMap = word.chars()
+                .mapToObj(c -> (char) c)
+                .collect(Collectors.groupingBy(Function.identity(), Collectors.counting()));
+
+        Map.Entry<Character, Long> minOccrance = newMap.entrySet()
+                .stream()
+                .min(Map.Entry.comparingByValue())
+                .get();
+
+        System.out.println("Character" + minOccrance.getKey());
+        System.out.println("MinOccurance" + minOccrance.getValue());
+
     }
 
 }

@@ -1,0 +1,108 @@
+What is thread?
+Thread is a smallest executable unit of a process. Thread has it’s own path of execution in a process. A process can
+have multiple threads.
+========================================================================================================================
+What is process?
+Process is an executing instance of an application. For example, when you double click MS Word icon in your
+computer, you start a process that will run MS word application.
+========================================================================================================================
+What is application?
+Application is a program which is designed to perform a specific task. For example – MS Word, Google Chrome,
+a video or audio player etc.
+========================================================================================================================
+What is multithreaded programming?
+In a program or in an application, when two or more threads execute their task simultaneously then it is called multi
+threaded programming. Java supports multithreaded programming.
+========================================================================================================================
+Types Of Threads
+There are two types of threads in Java.
+
+1) User Threads :
+User threads are threads which are created by the application or user. They are high priority threads.
+JVM will not exit until all user threads finish their execution. JVM wait for user threads to finish their task.
+These threads are foreground threads.
+
+2) Daemon Threads :
+Daemon threads are threads which are mostly created by the JVM. These threads always run in background.
+These threads are used to perform some background tasks like garbage collection. These threads are less priority
+threads. JVM will not wait for these threads to finish their execution. JVM will exit as soon as all user threads
+finish their execution.
+========================================================================================================================
+How do you create threads in Java?
+There are two ways to create threads in Java.
+1) By extending java.lang.Thread class
+class MyThread extends Thread
+{
+    @Override
+    public void run()
+    {
+        //Keep the task to be performed here
+    }
+}
+
+MyThread myThread = new MyThread();      //Instantiating MyThread
+myThread.start();                        //Starting myThread
+
+2) By implementing java.lang.Runnable interface
+class MyRunnable implements Runnable
+{
+    @Override
+    public void run()
+    {
+        //Keep the task to be performed here
+    }
+}
+
+Thread t = new Thread(new MyRunnable());    //Creating thread by passing Runnable type
+t.start();            //Starting the thread
+========================================================================================================================
+java.lang.Thread Methods :
+
+Method	     Description
+start()	     It starts execution of a thread. It internally calls run() method.
+run()	     It contains main task to be performed by the thread.
+sleep()	     It makes the currently executing thread to pause it’s execution for a specified period of time. When the thread is going for sleep, it does not release the locks it holds.
+wait()	     It makes the currently executing thread to release the lock of this object and wait until some other thread notifies it.
+notify()	 It wakes up one thread randomly which is waiting for this object’s lock.
+notifyAll()	 It wakes up all thread which are waiting for this object’s lock. But, only one thread will acquire lock of this object depending upon the priority.
+join()	     Using this method, you can make the currently executing thread to wait for some other threads to finish their task.
+isAlive()	 It checks whether a thread is alive or not.
+========================================================================================================================
+Thread Synchronization
+When a method or block is declared as synchronized, only one thread can enter into that method or block. When one
+thread will be executing synchronized method or block, the other threads which wants to execute that method or block
+have to wait until first thread executes that method or block. Thus avoiding the thread interference and achieving the thread safeness.
+========================================================================================================================
+Deadlock
+Deadlock in Java is a condition which occurs when two or more threads get blocked waiting for each other for an
+infinite period of time to release the resources(Locks) they hold.
+Lock ordering and lock timeout are two methods which are used to avoid the deadlock in Java.
+
+Lock Ordering :
+In this method of avoiding the deadlock, some predefined order is applied for threads to acquire the locks they need.
+For example, If there are three threads t1, t2 and t3 running concurrently and they needed locks A, B and C.
+t1 needs A and B locks, t2 needs A and C locks and t3 needs A, B and C locks. If you define an order to acquire the
+locks like, Lock A must be acquired before Lock B and Lock B must be acquired before Lock c, then deadlock never occurs.
+
+Lock Timeout :
+It is another deadlock preventive method in which we specify the time for a thread to acquire the lock. If it fails
+to acquire the specified lock in the given time, then it should give up trying for a lock and retry after some time.
+========================================================================================================================
+Inter Thread Communication :
+Threads in Java communicate with each other using wait(), notify() and notifyAll() methods.
+========================================================================================================================
+Thread Life Cycle OR Thread States In Java :
+There are six thread states. They are NEW, RUNNABLE, BLOCKED, WAITING, TIMED_WAITING and TERMINATED. At any point of
+time, thread will be in any one of these states.
+
+NEW : A thread will be in this state before calling start() method.
+RUNNABLE : A thread will be in this state after calling the start() method.
+BLOCKED : A thread will be in this state when a thread is waiting for object lock to enter into synchronized
+          method/block or a thread will be in this state if deadlock occurs.
+WAITING : A thread will be in this state when wait() or join() method is called.
+TIMED_WAITING : A thread will be in this state when sleep() or wait() with timeOut or join() with timeOut is called.
+TERMINATED : A thread will be in this state once it finishes it’s execution.
+
+========================================================================================================================
+
+========================================================================================================================

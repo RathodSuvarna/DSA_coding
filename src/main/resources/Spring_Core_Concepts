@@ -28,6 +28,23 @@ applications.
 But in Spring boot, we use Auto-configuration and component scanning to automatically discover and
 register beans on the applicaiton's context and classpath. This means now we don’t have manually wire
 up beans.
+
+constructor injection, setter injection, or field injection?
+These are three ways to inject dependencies in Spring’s Dependency Injection (DI) mechanism.
+They define how Spring provides required beans (dependencies) to another bean.
+========================================================================================================================
+17. Explain constructor injection vs setter injection.
+“Constructor injection provides dependencies at the time of object creation, ensuring all required dependencies are
+available and making the class immutable, Recommended for required dependencies, Makes class easier to test.
+Setter injection, on the other hand, allows injecting dependencies after
+object creation and is better suited for optional dependencies. Generally, constructor injection is preferred in
+modern Spring applications for mandatory dependencies. Improves readability if there are many dependencies.”
+
+field Injection : Spring injects the dependency directly into fields using reflection. short and simple.
+Disadvantages:
+Not recommended for production code.
+Hard to test — you can’t inject mocks easily in unit tests.
+Violates encapsulation — Spring uses reflection to modify private fields.
 ========================================================================================================================
 3. Difference between @Component, @Service, and @Repository.
  @Component: The most generic annotation. It marks a class as a Spring bean.
@@ -124,7 +141,7 @@ some object, Spring will provide it. There are two main types: BeanFactory (basi
 ApplicationContext (advanced, most used).
 ========================================================================================================================
 6. How does @Autowired work?
-The @Autowired annotation in Spring is a mechanism for automatic dependency injection. It
+@Autowired is used to automatically inject a bean from the Spring container into another bean. It
 allows the Spring IoC (Inversion of Control) container to automatically resolve and inject dependencies
 into the Spring-managed components (beans) without requiring explicit configuration in XML or Java.
 
@@ -318,9 +335,5 @@ Lazy loading means: Create the bean only when it is first requested (injected or
 bean creates a new instance each time it’s requested. Singleton is the default scope and is best for stateless beans,
 whereas Prototype is used for stateful or user-specific objects.”
 ========================================================================================================================
-17. Explain constructor injection vs setter injection.
-“Constructor injection provides dependencies at the time of object creation, ensuring all required dependencies are
-available and making the class immutable. Setter injection, on the other hand, allows injecting dependencies after
-object creation and is better suited for optional dependencies. Generally, constructor injection is preferred in
-modern Spring applications for mandatory dependencies.”
+
 ========================================================================================================================

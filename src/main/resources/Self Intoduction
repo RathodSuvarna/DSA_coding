@@ -1,0 +1,171 @@
+Q: Tell me about yourself
+Hi, I’m Suvarna. I have 4 years of experience in Java backend development.
+
+For the first two years, I worked on an OTT streaming platform where I was part of the payment services module.
+The project was developed using Spring Boot and microservices architecture.
+
+For the past two years, I’ve been working on a government-based project for GST, which is built using the
+Spring Framework and microservices.
+
+So, I have hands-on experience working with both Spring Framework and Spring Boot, and I’m confident in building
+scalable and maintainable backend services.
+========================================================================================================================
+🧠 Q: What was your role and responsibility in your project?
+In the OTT streaming project, I worked on the payment module as a Junior Java Developer.
+My responsibilities included debugging issues, finding root causes, and fixing bugs in the existing code.
+I was also involved in building and deploying applications using Jenkins, and in collecting and analyzing logs from
+AWS and ELK for issue resolution.
+Additionally, I worked on several payment service APIs, such as create payment, make payment and delete payment.
+
+In the GSTN taxation project, I took on more responsibility. I was involved in designing, developing, and deploying
+REST APIs as part of various microservices.
+I also participated in requirement analysis, ensured timely delivery, and contributed to code reviews and testing
+to maintain code quality.
+========================================================================================================================
+Explain your project end to end GST
+1. GSTN (Taxation) Project
+In the GSTN project, I worked on Enforcement and Assignment modules.
+
+This project follows a microservices architecture and is built using the Spring Framework.
+Based on client requirements, we used to analyze feasibility, design the APIs, and implement the RESTful APIs.
+
+We used Tortoise SVN for version control — checking out the code, implementing changes, and checking it back in after review.
+Once the code was committed, we triggered a Jenkins build, and after successful build generation, we handed over the
+version to the DevOps team for deployment.
+
+After deployment, we performed API testing in the development environment.
+Once verified, we moved the code sequentially to UAT (User Acceptance Testing), then Staging, and finally Production.
+
+I was responsible for end-to-end development, including requirement analysis, API design, implementation, bug fixing,
+and supporting releases across environments.
+========================================================================================================================
+Explain your project end to end OTT Streaming
+2. OTT Streaming Project (Payment Microservice)  -> Spring boot 2.7 Java 8
+
+In the OTT streaming project, we had multiple microservices like Order, Cart, Checkout, Inventory, and Payment microservices.
+I was part of the Payment microservice team.
+
+Based on client requirements, we first analyzed what kind of API needed to be designed and developed.
+Once the requirements were clear, I designed and implemented the REST APIs for various payment-related functionalities.
+
+After local testing, I committed the code to the development branch in the repository.
+Then, I built and deployed the service using Jenkins to the AWS environment.
+
+Once deployed, I tested the APIs end-to-end, checked logs from AWS instances or ELK for any issues, debugged and fixed
+bugs if found, and redeployed the service after verification.
+
+Overall, I was responsible for the full cycle — from requirement analysis and development to deployment and
+post-deployment validation of payment services.
+
+========================================================================================================================
+What is Tortoise SVN for version control?
+TortoiseSVN is a version control tool used to manage source code — similar in purpose to Git, but it’s based on a
+system called Subversion (SVN).
+It helps teams track changes, collaborate, and maintain versions of code over time.
+
+Every developer works on a local copy of the project.
+When they make changes, they commit those changes back to the central SVN repository.
+Other developers can then update their local code to get the latest version.
+
+we don’t need to use command-line commands.
+it integrates directly with Windows Explorer (you can right-click on folders to commit, update, or check out code).
+Common operations are easily available from the right-click menu.
+
+🔄 Modern comparison
+SVN/TortoiseSVN → centralized version control (one central server).
+Git/GitHub/GitLab → distributed version control (everyone has a local copy of the full repo).
+Both serve the same goal — code versioning — but Git is more modern and widely used now.
+========================================================================================================================
+How you deploy the code in AWS and how you check the logs in AWS?
+
+Short & Professional Interview Answer:
+In our project, we deployed the code to AWS using Jenkins.
+Once I committed the code to the repository, Jenkins automatically built the project and deployed the generated JAR file to an AWS EC2 instance.
+After deployment, I verified the API in Postman to ensure it was working correctly.
+
+For log monitoring, I used two ways — by connecting to the AWS instance through SSH and checking the application logs,
+and also through the ELK dashboard, which gave us centralized log tracking across all microservices.
+
+We mostly used tail -f to live-check logs and identify errors quickly after deployment.
+If the issue was not visible in EC2 logs, we used Kibana filters to trace it across multiple services.
+
+🧠 1️⃣ Technical Explanation — “How you deploy the code in AWS”
+
+In our OTT project, we followed a CI/CD process using Jenkins and AWS EC2 (Elastic Compute Cloud) instances for deployment.
+Deployment Steps:
+
+Code Commit:
+Developers commit code changes to the repository (e.g., Bitbucket / Git / SVN).
+
+Build in Jenkins:
+Jenkins pipeline or freestyle job is triggered.
+It pulls the latest code from the repository.
+Builds the project using Maven (mvn clean install).
+Generates a deployable artifact — like a .jar or .war file.
+
+Deploy to AWS:
+Jenkins connects to the AWS EC2 instance (via SSH or a deployment script).
+The new artifact is copied to the EC2 server.
+Jenkins restarts the Spring Boot service (using systemctl or nohup java -jar).
+Sometimes we used Elastic Beanstalk or Docker + ECS for containerized deployment.
+
+Verification:
+After deployment, we verify by calling APIs (through Postman) and checking if the latest version is running fine.
+
+📜 2️⃣ How you check logs in AWS
+There are two common ways:
+✅ A. EC2 Instance Logs (via SSH)
+Connect to the AWS EC2 server using SSH:
+
+✅ B. ELK Stack (Elasticsearch, Logstash, Kibana)
+Logs are also pushed to ELK for centralized monitoring.
+Open the Kibana dashboard, search for the service (e.g., “payment-ms”), and filter logs by timestamp, status, or error keywords.
+Helps quickly analyze errors or trace requests across microservices.
+========================================================================================================================
+What is ELK and how you collected the logs and how you used ELK?
+Interview-ready short answer
+ELK stands for Elasticsearch, Logstash, and Kibana.
+In our project, we used ELK for centralized log management of all microservices.
+Each service generated logs which were collected from AWS EC2 instances using Filebeat and sent to Logstash,
+which then pushed the data into Elasticsearch.
+We used Kibana to view and analyze these logs — for example, searching for error messages, tracking API failures,
+or monitoring traffic patterns.
+This helped us quickly identify issues after deployment and perform root cause analysis across services.
+
+if interviewer asks “Why ELK?”
+We used ELK because in a microservices architecture, each service runs on a separate instance, making it hard to track logs manually.
+ELK gives us a centralized dashboard, real-time search, and filtering across all services — which greatly reduces debugging time.
+
+ELK stands for:
+
+E → Elasticsearch
+→ a search and analytics engine that stores and indexes your log data.
+
+L → Logstash
+→ a data processing pipeline that collects logs from multiple sources (like EC2, Docker, or apps) and sends them to Elasticsearch.
+
+K → Kibana
+→ a visual dashboard that lets you search, filter, and analyze logs in a web UI.
+
+Together, they form a powerful centralized logging solution for distributed microservices.
+
+🧰 3️⃣ How you used ELK in your daily work
+
+In your OTT project:
+After every deployment, you monitored your service using Kibana.
+If there was any issue, you searched the log entries in Kibana by:
+API endpoint name
+timestamp
+log level (ERROR, WARN, etc.)
+This helped identify root causes of failures quickly — for example, invalid payment requests or external API timeouts.
+You could also trace a request across multiple microservices by using the request ID or transaction ID.
+
+
+
+
+
+
+
+
+
+

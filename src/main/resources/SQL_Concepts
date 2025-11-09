@@ -1,0 +1,329 @@
+1. What is SQL?
+SQL stands for Structured Query Language. It is a programming language used to store and manipulate the
+data in relational databases.
+========================================================================================================================
+2. SQL Database :
+CREATE DATABASE : This SQL command creates a new SQL database with specified name.
+CREATE DATABASE database_name;
+
+DROP DATABASE : This SQL command is used to delete an existing SQL database.
+DROP DATABASE database_name;
+
+BACKUP DATABASE : This SQL command is used to create full back up of an existing database.
+BACKUP DATABASE database_name TO DISK = 'filepath';
+
+BACKUP DATABASE WITH DIFFERENTIAL : This SQL command creates differential back up of an existing database.
+Differential back up backs up only those parts of the database which have been changed since last back up.
+BACKUP DATABASE database_name TO DISK = 'filepath' WITH DIFFERENTIAL;
+
+SQL Tables :
+CREATE TABLE : This SQL command is used to create a new table in a database.
+CREATE TABLE table_name (column1 datatype, column2 datatype, column3 datatype ....);
+
+INSERT INTO : It is used to insert new records into a table.
+INSERT INTO table_name (column1, column2, column3 ...) VALUES (value1, value2, value3 ...);
+
+DROP TABLE : It is used to delete an existing table from a database.
+DROP TABLE table_name;
+
+TRUNCATE TABLE : This command deletes all the data from a table but not the table itself.
+TRUNCATE TABLE table_name;
+
+ALTER TABLE : This command is used to add, delete and modify table columns.
+========================================================================================================================
+3. SQL Index :
+SQL indexes are used to speed up search queries in the database tables. Users can’t see the indexes but they require
+their own storage space in the database. They are useful when you have to search for a data in the large database tables.
+CREATE INDEX : It is used create indexes on the database tables.
+
+It works like an index in a book — helps the database find rows faster without scanning the entire table.
+
+✅ When to Use:
+Columns in WHERE, JOIN, GROUP BY, or ORDER BY.
+Frequently searched fields (e.g., email, dept_id).
+⚠️ Avoid Indexes When:
+The table is small.
+The column has low selectivity (e.g., gender = M/F).
+Frequent inserts/updates — since indexes slow down write operations.
+
+CREATE INDEX index_name
+ON table_name (column1, column2, ...);
+ALTER INDEX RENAME TO : It is used to rename already existing index.
+
+ALTER INDEX old_index_name
+RENAME TO new_index_name;
+DROP INDEX : It is used to remove an already existing index on a table.
+
+DROP INDEX Index_Name;
+========================================================================================================================
+4. SQL Stored Procedures :
+SQL stored procedure is a group of pre-compiled SQL statements forming one logical unit and they are stored in a
+database server and can be called whenever required without compiling again and again. They are useful when you have a set of statements to be executed frequently.
+CREATE PROCEDURE : This statement is used to create stored procudures.
+
+CREATE PROCEDURE procedure_name @parameter_name data_type ....
+AS
+   BEGIN
+      -- SQL statements
+   END
+EXEC : This statement is used to call stored procedures.
+
+
+EXEC procedure_name;
+========================================================================================================================
+5. Difference between INNER JOIN, LEFT JOIN, and RIGHT JOIN.
+“INNER JOIN gives only matching rows,
+LEFT JOIN gives all from left + matches,
+RIGHT JOIN gives all from right + matches.”
+
+SELECT e.name, d.dept_name
+FROM employee e
+INNER JOIN department d ON e.dept_id = d.id;
+========================================================================================================================
+6. How do you optimize a slow query?
+I usually optimize slow queries by:
+Analyzing execution plan using EXPLAIN to find bottlenecks.
+Creating indexes on columns used in WHERE, JOIN, or ORDER BY.
+**Avoiding SELECT *** — fetch only required columns.
+Reducing subqueries — use joins or CTEs where possible.
+Avoiding functions on indexed columns (e.g., WHERE UPPER(name) prevents index usage).
+Using proper joins instead of nested loops or correlated subqueries.
+Caching repeated queries at the app level when possible.
+Archiving old data if the table is very large.
+
+EXPLAIN SELECT * FROM employee WHERE dept_id = 10;
+
+========================================================================================================================
+7. Explain transactions and ACID properties.
+Transaction (one-line): A transaction is a sequence of database operations executed as a single logical unit so that
+either all operations succeed (commit) or none take effect (rollback).
+Why use a transaction (one-line): To preserve data integrity when multiple related changes must succeed together
+(e.g., money transfer: debit and credit).
+
+ACID properties — one line each with a tiny example:
+A — Atomicity: Either all operations in the transaction are applied or none are — there is no partial application.
+Example: If a transfer debits A but fails to credit B, the whole transaction is rolled back so neither change persists.
+
+C — Consistency: A transaction transforms the database from one valid state to another valid state, preserving all
+defined rules, constraints and invariants.
+Example: If a constraint requires total balance ≥ 0, transactions must not leave the database violating that rule.
+
+I — Isolation: Concurrent transactions behave as if they were executed serially (isolation level controls visibility
+and anomalies).
+Example: Two simultaneous transfers should not see each other’s intermediate (uncommitted) changes.
+
+D — Durability: Once a transaction commits, its effects are permanent — they survive crashes or restarts.
+Example: After commit, updated balances remain even if the DB server restarts immediately.
+
+Practical note (one-line): Isolation has multiple levels
+ (READ UNCOMMITTED → READ COMMITTED → REPEATABLE READ → SERIALIZABLE) that trade performance for fewer concurrency anomalies.
+
+========================================================================================================================
+8. What is the difference between DELETE, TRUNCATE, and DROP?
+DELETE (one-line):
+DELETE FROM table [WHERE condition] removes selected rows; it is a DML operation, can be rolled
+back inside a transaction, and fires row-level triggers.
+Example: DELETE FROM employee WHERE id = 10; — removes that row only.
+
+TRUNCATE (one-line):
+TRUNCATE TABLE table removes all rows quickly (often by deallocating data pages); it is usually
+treated as DDL or a minimally-logged operation and is typically faster than DELETE for clearing a table.
+Behavior note: In many DBMS TRUNCATE is non-transactional (cannot be rolled back) because it is DDL; however,
+some systems (e.g., PostgreSQL) treat TRUNCATE as transactional and it can be rolled back — so check your RDBMS.
+Example: TRUNCATE TABLE employee; — removes all rows quickly and resets storage.
+
+DROP (one-line): DROP TABLE table removes the table definition and its data from the schema (structure + data);
+it is DDL, cannot be used to delete a subset of rows, and typically cannot be rolled back in many systems.
+Example: DROP TABLE employee; — table no longer exists.
+
+Effect on schema and dependent objects (one-line):
+
+DELETE does not change table structure or reset identity counters.
+
+TRUNCATE usually resets identity/auto-increment counters (depends on DB).
+
+DROP removes the table and its metadata; dependent objects (indexes, constraints) are removed too.
+
+Performance & logging (one-line): DELETE logs individual row deletions (slower, heavier WAL/redo), TRUNCATE is usually
+ minimally logged or metadata-only (faster), DROP is metadata removal (fastest).
+
+Triggers & constraints (one-line): DELETE fires DELETE triggers; TRUNCATE usually does not fire row-level triggers;
+DROP also does not fire row-level triggers (but may affect DDL triggers if DB supports them).
+
+Transactional safety (one-line): Use DELETE when you need transactional safety and selective removal;
+use TRUNCATE for fast removal of all rows when you don’t need per-row auditing and you understand your RDBMS’s
+transaction behavior; use DROP when you want to remove the entire table structure.
+========================================================================================================================
+9. What is normalization?
+Normalization is the process of organizing data in a database to reduce redundancy and improve data integrity.
+It divides large tables into smaller related tables and establishes relationships between them using foreign keys.
+
+🧠 Example:
+Denormalized → employee table with department name repeated in every row.
+Normalized → separate Employee and Department tables, linked by dept_id.
+========================================================================================================================
+10. Write a query to find the 2nd highest salary.
+SELECT DISTINCT salary
+FROM employee
+ORDER BY salary DESC
+LIMIT 1 OFFSET 1;
+
+SELECT MAX(salary)
+FROM employee
+WHERE salary < (SELECT MAX(salary) FROM employee);
+========================================================================================================================
+
+========================================================================================================================
+
+========================================================================================================================
+
+========================================================================================================================
+
+========================================================================================================================
+
+--Adding a column to a table
+ALTER TABLE table_name
+ADD column_name datatype;
+
+--Deleting a column from a table
+ALTER TABLE table_name
+DROP COLUMN column_name;
+
+--Renaming a column of a table
+ALTER TABLE table_name
+RENAME COLUMN old_name to new_name;
+
+--Changing the datatype of a column
+ALTER TABLE table_name
+MODIFY column_name datatype;
+UPDATE : This command is used to modify or update table records.
+
+UPDATE table_name
+SET column1 = value1, column2 = value2 ...
+WHERE condition;
+DELETE : This command is used to delete records from a table.
+
+--Deleting all the rows from a table
+DELETE FROM table_name;
+
+--Deleting the rows with condition
+DELETE FROM table_name WHERE condition;
+
+SELECT : It is used to retrieve data from a table.
+SELECT * FROM table_name;    --Selects all data from a table
+SELECT column1, column2 ... FROM table_name;   --Selects data from specific columns
+SELECT DISTINCT : This command selects only distinct values from a table.
+
+SELECT DISTINCT column1, column2 ...
+FROM table_name;
+
+========================================================================================================================
+SQL Constraints :
+SQL constraints are used to specify the rules for the columns of a table.
+
+SQL Constraints	  Description
+NOT NULL	      A column declared with NOT NULL can’t have null values.
+UNIQUE	          A column declared as UNIQUE can’t have duplicate values.
+DEFAULT	          It specifies the default value for a column if no value is provided.
+PRIMARY KEY	      It declares a column as primary key.
+FOREIGN KEY       It declares a column as foreign key.
+CHECK	          It ensures that values in a column must satisfy the given condition.
+========================================================================================================================
+SQL Clauses :
+WHERE : It is used to retrieve or update or delete the records based on some condition.
+This clause can be used with SELECT, UPDATE and DELETE statements.
+
+--SELECT With WHERE
+SELECT column1, column2 ...
+FROM table_name
+WHERE condition;
+
+--UPDATE With WHERE
+UPDATE table_name
+SET column1 = value1, column2 = value2 ...
+WHERE condition;
+
+--DELETE With WHERE
+DELETE FROM table_name WHERE condition;
+
+ORDER BY : It is used to sort the records in ascending or descending order.
+SELECT column1, column2 ...
+FROM table_name
+ORDER BY column1, column2 ... ASC|DESC;
+
+GROUP BY : This clause is often used with aggregate functions like SUM(), COUNT(), AVG()… to group the
+result set by one or two columns.
+SELECT column_name(s), aggregate_function_name(column_Name)
+FROM table_name
+WHERE condition
+GROUP BY column_name(s);
+
+HAVING : This clause is added to SQL because WHERE can’t be used with aggregate functions.
+SELECT column_name(s), aggregate_function_name(column_Name)
+FROM table_name
+WHERE condition
+GROUP BY column_name(s)
+HAVING condition;
+
+SQL Joins :
+SQL joins are used to combine two or more tables based on a common column between them.
+
+INNER JOIN : It selects the records which are common in both the tables.
+SELECT column_name(s)
+FROM table1 INNER JOIN table2 ON
+table1.column_name = table2.column_name;
+
+LEFT JOIN : It returns all the records from left table and matching records from right table.
+SELECT column_name(s)
+FROM table1 LEFT JOIN table2 ON
+table1.column_name = table2.column_name;
+
+RIGHT JOIN : It returns all the records from right table and matching records from left table.
+SELECT column_name(s)
+FROM table1 RIGHT JOIN table2 ON
+table1.column_name = table2.column_name;
+
+OUTER JOIN or FULL OUTER JOIN : It returns all the records from both the tables.
+SELECT column_name(s)
+FROM table1 FULL OUTER JOIN table2 ON
+table1.column_name = table2.column_name;
+
+UNION : It is used to combine the result set of two or more select statements.
+SELECT column_name(s) FROM table1
+UNION
+SELECT column_name(s) FROM table2;
+========================================================================================================================
+
+========================================================================================================================
+
+========================================================================================================================
+
+========================================================================================================================
+
+========================================================================================================================
+
+========================================================================================================================
+
+========================================================================================================================
+
+========================================================================================================================
+
+========================================================================================================================
+
+========================================================================================================================
+
+========================================================================================================================
+
+========================================================================================================================
+
+========================================================================================================================
+
+========================================================================================================================
+
+========================================================================================================================
+
+========================================================================================================================
+
+========================================================================================================================
+
+========================================================================================================================

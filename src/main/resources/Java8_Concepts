@@ -1,0 +1,384 @@
+1. After Java 8, what do you think about Java? Is it still an object oriented language or it has turned into functional
+programming language?
+Java is still an object oriented language where everything is done keeping objects (data) in mind. But, with the
+ introduction of new features in Java 8, you can use Java as a functional programming language also. You can treat
+ it as as an added advantage over the other languages which are either object oriented or functions oriented.
+ From Java 8, you can use Java either in an object-oriented programming paradigm or in a functional programming
+ paradigm. It supports both.
+========================================================================================================================
+2. What are default methods and why are they are introduced?
+Default methods of an interface are the concrete methods for which implementing classes need not to give implementation.
+They inherit default implementation.
+
+Default methods are introduced to add extra features to current interfaces without disrupting their existing
+implementations. For example, stream() is a default method which is added to Collection interface in Java 8.
+If stream() would have been added as abstract method, then all classes implementing Collection interface must have
+implemented stream() method which may have irritated existing users. To overcome such issues, default methods are
+introduced to interfaces from Java 8.
+========================================================================================================================
+3. Why Java 8 introduced static methods to the Interfaces?
+Java 8 introduced static methods in interfaces to allow developers to define utility or helper methods directly
+within the interface, keeping related behavior together and avoiding the need for separate utility classes.
+These methods belong to the interface itself and are not inherited by implementing classes.
+
+Java API developers have followed the pattern of supplying an utility class along with an interface to perform basic
+operations on such objects.
+For example, Collection and Collections. Collection is an interface and Collections is an utility class containing
+only static methods which operate on Collection objects.
+But from Java 8, they have break this pattern by introducing static methods to interfaces. With the introduction
+ of static methods to interface, such utility classes will disappear gradually and methods to perform basic operations will be kept as static methods in interface itself.
+========================================================================================================================
+4. What is optional and it uses? When should you NOT use it?
+Let’s say we are calling a method and we are not sure if it'll return a value or null. Before Java 8,
+We had to check whether the value is null or not if not, there is high chance of getting
+NullPointerException.
+Optional is a container that may or may not hold a non-null value. It is used to clearly show that
+a method might not return a result. Instead of returning null, the method returns an Optional to help
+avoid NullPointerException and make the code safer and easier to understand.
+Example: In the below example, if user is null, user.getName() will throw NullPointerException.
+
+String getName(User user) {
+  return user.getName();
+}
+Now from Java 8, instead of returning String we will return Optional<String> which tells that , this may
+contain null and should be handled.
+
+Optional<String> getName(User user) {
+return Optional.ofNullable(user.getName());
+}
+String name = getName(user).orElse("Anonymous"); //If user is null it returns ‘No User’
+========================================================================================================================
+5. What is functional interface ?
+Functional interfaces are the interfaces which has exactly one abstract method. Functional interfaces provide only
+one functionality to implement.
+
+There were functional interfaces exist before Java 8. It is not like that they are the whole new concept introduced
+ only in Java 8. Runnable, ActionListener, Callable and Comaprator are some old functional interfaces which exist
+ even before Java 8.
+
+The new set of functional interfaces are introduced in Java 8 for writing lambda expressions.
+Lambda expressions must implement any one of these new functional interfaces.
+========================================================================================================================
+6. Explain different types of functional interfaces?
+1. Consumer: This interface represents an operation that accepts a single input argument and returns no
+result. It is used when an action needs to be performed on an object without producing a return value.
+Example: forEach()
+@FunctionalInterface
+public interface Consumer<T> {
+void accept(T t);
+}
+
+2. Supplier: This interface represents a supplier of results. It takes no arguments and returns a value of a
+specified type. It is used when a value needs to be generated or retrieved. Example: Optional.orElseGet
+@FunctionalInterface
+public interface Supplier<T> {
+T get();
+}
+
+3. Predicate: Predicate is a functional interface which represents a boolean operation which takes one argument.
+ex: filter()
+   @FunctionalInterface
+   public interface Predicate<T> {
+   boolean test(T t);
+   }
+
+4. BiPredicate: BiPredicate is also functional interface but it represents a boolean operation which takes two arguments.
+
+5. Function: This interface represents a function that accepts one argument and produces a result. It is
+used for transforming an input value into an output value of a potentially different type. Example: map()
+ @FunctionalInterface
+ public interface Function<T, R> {
+ R apply(T t);
+ }
+
+ 6. BiFunction: BiFunction is also functional interface which represents an operation which takes two arguments of
+ type T and U and returns a result of type R.
+========================================================================================================================
+7. When you use UnaryOperator and BinaryOperator interfaces?
+UnaryOperator performs same operation as Function but it is used when type of the argument and result should
+be of same type.
+
+BinaryOperator performs same operation as BiFunction but it is used when type of the arguments and result
+should be of same type.
+========================================================================================================================
+8. Explain about Lambda expression?
+ Lambda Expressions can be defined as methods without names i.e anonymous functions. Like methods,
+ they also have parameters, a body, a return type and possible list of exceptions that can be thrown.
+ But unlike methods, neither they have names nor they are associated with any particular class.
+
+ Lambda expressions are used where an instance of functional interface is expected. Before Java 8,
+ anonymous inner classes are used for this purpose. After Java 8, you can use lambda expressions to
+ implement functional interfaces.
+
+ Syntax: (parameters) -> expression
+
+These lambda expressions have changed the style of programming in Java significantly. They have made the Java code
+more clear, concise and readable than before. For example,
+
+Below code shows how Comparator interface is implemented using anonymous inner class before java 8
+Comparator<Student> idComparator = new Comparator<Student>() {
+            @Override
+            public int compare(Student s1, Student s2) {
+                return s1.getID()-s2.getID();
+            }
+        };
+
+after java 8
+Comparator<Student> idComparator = (Student s1, Student s2) -> s1.getID()-s2.getID();
+
+Implementation of Runnable interface using anonymous inner class before Java 8 :
+
+Runnable r = new Runnable() {
+            @Override
+            public void run() {
+                System.out.println("Runnable Implementation Using Anonymous Inner Class");
+            }
+        };
+
+after java 8
+Runnable r = () -> System.out.println("Runnable Implementation Using Lambda Expressions");
+
+How the signature of lambda expressions are determined?
+The signature of lambda expressions are derived from the signature of abstract method of functional interface. For example,
+
+Can we use non-final local variables inside a lambda expression?
+No. Only final local variables are allowed to use inside a lambda expressions just like anonymous inner classes.
+
+What are the advantages of lambda expressions?
+Lambda expressions let you to write more clear, concise and readable code.
+Lambda expressions removes verbosity and repetition of code.
+========================================================================================================================
+9. How functional interfaces and lambda expressions are inter related?
+Lambda expressions are introduced to implement functional interfaces in a simplest way and new functional interfaces
+are introduced to support lambda expressions in Java 8. Both together have given a new dimension to Java programming
+where you can write more complex data processing queries in a few lines of code.
+
+========================================================================================================================
+10. Explain about Method references and uses?
+Java 8 method references can be defined as shortened versions of lambda expressions calling a specific method.
+Method references are the easiest way to refer a method than the lambdas calling a specific method.
+Method references will enhance the readability of your code.
+
+Types:
+1️⃣ Static method reference — ClassName::staticMethod  ex: Math::max
+2️⃣ Instance method reference — object::instanceMethod  ex: printer::print
+3️⃣ Arbitrary object’s instance method — ClassName::instanceMethod  ex: String::toUpperCase
+4️⃣ Constructor reference — ClassName::new   ex: ArrayList::new
+========================================================================================================================
+11. What is the Stream API in Java 8?
+The Stream API in Java 8 is used to process collections of data in a declarative and functional way.
+It allows performing operations like filtering, mapping, sorting, reducing, and collecting without writing loops.
+
+Before Java 8, we used to write long for-loops to filter, map, or collect data.
+Streams are introduced in Java 8. Streams make the code shorter, readable, and more
+declarative; they provide a functional and efficient way to process collections by creating a pipeline of
+operations. They enable declarative programming, lazy evaluation, and parallel processing without
+modifying the original data source.
+
+1. Lazy Evaluation -> Stream operations don’t execute until a terminal operation like collect or forEach is called.
+2. Parallel Processing -> parallel streams split data into chunks and process them across multiple threads for better performance.
+3. Immutable Flow -> Water in the pipeline doesn’t affect the water tank. Similarly, a Java Stream doesn’t
+   modify the original collection; instead, it produces a transformed result.
+========================================================================================================================
+12. Can we consider streams as another type of data structure in Java? Justify your answer?
+You can’t consider streams as data structure. Because they don’t store the data. You can’t add or remove elements
+from the streams. They are the just operations on data. Stream consumes a data source, performs operations on
+it and produces the result. Source may be a collection or an array or an I/O resource. They don’t modify the source.
+========================================================================================================================
+13. What are intermediate and terminal operations?
+The operations which return stream themselves are called intermediate operations.
+For example – filter(), distinct(), sorted() etc.
+
+The operations which return other than stream are called terminal operations.
+for example - count(). min(), max() are some terminal operations.
+========================================================================================================================
+14. What do you mean by pipeline of operations? What is the use of it?
+A pipeline of operations consists of three things – a source, one or more intermediate operations and a terminal
+operation. Pipe-lining of operations let you to write database-like queries on a data source. Using this, you can
+write more complex data processing queries with much of ease.
+========================================================================================================================
+15. “Stream operations do the iteration implicitly” what does it mean?
+Collections need to be iterated explicitly. i.e you have to write the code to iterate over collections.
+But, all stream operations do the iteration internally behind the scene for you. You need not to worry about iteration
+at all while writing the code using Java 8 Streams API.
+
+Java 8 supports lazy loading.
+========================================================================================================================
+16. What are short circuiting operations?
+Short circuiting operations are the operations which don’t need the whole stream to be processed to produce a result.
+For example – findFirst(), findAny(), limit() etc.
+========================================================================================================================
+17. What are selection operations available in Java 8 Stream API?
+Operation        	Description
+filter()	-     Selects the elements which satisfy the given predicate.
+distinct()	-     Selects only unique elements
+limit()	    -     Selects first n elements
+skip()	    -      Selects the elements after skipping first n elements
+========================================================================================================================
+18. What are sorting operations available in Java 8 streams?
+There is only one sorting operation available in Java 8 streams which is sorted(). It has two versions.
+One which takes no argument sorts the elements in natural order and another one which takes Comparator as an argument
+sorts the elements according to supplied Comparator.
+========================================================================================================================
+19. What are reducing operations? Name the reducing operations available in Java 8 streams?
+Reducing operations are the operations which combine all the elements of a stream repeatedly to produce a single value.
+For example, counting number of elements, calculating average of elements, finding maximum or minimum of elements etc.
+
+Reducing operations available in Java 8 streams are,
+
+Operation	Description
+min()	    Returns minimum element
+max()	    Returns maximum element
+count()	    Returns the number of elements
+collect()	Returns mutable result container
+========================================================================================================================
+20. What are the matching operations available in Java 8 streams?
+Operation	Description
+anyMatch()	Returns true if any one element of a stream matches with given predicate
+allMatch()	Returns true if all the elements of a stream matches with given predicate
+noneMatch()	Returns true only if all the elements of a stream doesn’t match with given predicate.
+========================================================================================================================
+21. What are searching / finding operations available in Java 8 streams?
+Operation	 Description
+findFirst()	 Returns first element of a stream
+findAny()	 Randomly returns any one element in a stream
+========================================================================================================================
+22. Name the mapping operations available in Java 8 streams?
+Map() and FlatMap()
+Both are intermediate operations. The only difference is that map() takes Stream<T> as input and return Stream<R>
+where as flatMap() takes Stream<Stream<T> as input and return Stream<R> i.e flatmap() removes extra layer of nesting
+around input values.
+
+The map() method transforms each element of a stream into another object. It takes a Function as
+an argument, which defines the transformation logic. This function is applied to each stream element,
+and the result is collected into a new stream.
+
+The flatMap() method takes each element in the stream, applies a function to it, and that function
+returns another stream (could have 0, 1, or many elements).Then, flatMap() takes all those small
+streams and joins them into one big stream.
+
+Map()	                                                               flatMap()
+It processes stream of values.	                                   It processes stream of stream of values.
+It does only mapping.	                                           It performs mapping as well as flattening.
+It’s mapper function produces single value for each input value.   It’s mapper function produces multiple values for each input value.
+It is a One-To-One mapping.	                                       It is a One-To-Many mapping.
+Data Transformation : From Stream<T> to Stream<R>	               Data Transformation : From Stream<Stream<T> to Stream<R>
+
+========================================================================================================================
+23. Do you know Stream.collect() method, Collector interface and Collectors class? What is the relation between them?
+collect() method is a terminal operation in Stream interface. It is a special case of reduction operation which
+returns mutable result container such as List, Set or Map.
+
+Collector is an interface in java.util.stream package.
+
+Collectors class, also a member of java.util.stream package, is an utility class containing many static methods
+which perform some common reduction operations.
+
+All the methods of Collectors class return Collector type which will be supplied to collect() method as an argument.
+========================================================================================================================
+24. Name any 5 methods of Collectors class and their usage?
+
+Method	           Description
+joining()	       Concatenates input elements separated by the specified delimiter.
+counting()	       Counts number of input elements
+groupingBy()	   Groups the input elements according supplied classifier and returns the results in a Map.
+partitioningBy()   Partitions the input elements according to supplied Predicate and returns a Map<Boolean, List<T>>
+toList()	       Collects all input elements into a new List
+========================================================================================================================
+25. What are the differences between collections and streams?
+
+Collections	                                                      Streams
+Collections are mainly used to store and group the data.	     Streams are mainly used to perform operations on data.
+You can add or remove elements from collections.	             You can’t add or remove elements from streams.
+Collections have to be iterated externally.	                     Streams are internally iterated.
+Collections can be traversed multiple times.	                 Streams are traversable only once.
+Collections are eagerly constructed.	                         Streams are lazily constructed.
+Ex : List, Set, Map…	                                         Ex : filtering, mapping, matching…
+========================================================================================================================
+26. What is the difference between Java 8 Spliterator and the iterators available before Java 8?
+Iterator	                                                    Spliterator
+It performs only iteration.	                               It performs splitting as well as iteration.
+Iterates elements one by one.	                           Iterates elements one by one or in bulk.
+Most suitable for serial processing.	                   Most suitable for parallel processing.
+Iterates only collection types.	                           Iterates collections, arrays and streams.
+Size is unknown.	                                       You can get exact size or estimate of the size.
+Introduced in JDK 1.2.                                     Introduced in JDK 1.8.
+You can’t extract properties of the iterating elements.	   You can extract some properties of the iterating elements.
+External iteration.	Internal iteration.
+========================================================================================================================
+27. Name three important classes of Java 8 Date and Time API?
+java.time.LocalDate, java.time.LocalTime and java.time.LocalDateTime
+
+46) How do you get current date and time using Java 8 features?
+LocalDateTime currentDateTime = LocalDateTime.now();
+========================================================================================================================
+28. forEach vs collect()?
+collect()
+ It collects the processed stream into a data structure (like a List, Set, or Map)
+ It returns that data structure
+ We use it when we want to store or reuse the results
+forEach()
+ It goes through each item and performs an action (like printing or logging)
+ It returns nothing (void)
+ We use it for side effects, not for building data
+
+========================================================================================================================
+29. What is parallelStream()?
+parallelStream() in Java 8 is used to process elements of a stream in parallel, leveraging multiple CPU cores.
+It divides the stream into substreams, processes them concurrently using the ForkJoinPool, and then merges the results.
+It can improve performance for large, CPU-intensive operations, but should be used carefully since it can cause
+thread-safety and ordering issues if used improperly.
+========================================================================================================================
+30. Explain how stream pipeline work internally
+“A Stream pipeline consists of three parts — a source, zero or more intermediate operations, and a terminal operation.
+Intermediate operations like filter() and map() are lazy and only build a chain of operations.
+The pipeline actually executes only when a terminal operation like forEach() or collect() is called.
+At that point, the stream processes each element through all intermediate stages in a single pass, using internal
+iteration and a pull-based model.
+This design allows streams to be efficient, composable, and easily parallelizable.”
+
+“Streams in Java work as a lazy pipeline — intermediate operations are just definitions, and the actual work starts
+only when a terminal operation triggers processing. Each element passes through the entire pipeline before the next
+one begins.”
+========================================================================================================================
+
+========================================================================================================================
+
+========================================================================================================================
+
+========================================================================================================================
+9. Can you list of streams operators you have used or you know?
+   1. Source Operators: Create a stream from a collection, array, or I/O source.
+   • stream() – Converts a collection into a sequential stream.
+   • parallelStream() – Creates a parallel stream for multi-threading.
+   • Stream.of() – Generates a stream from given values.
+   • Arrays.stream() – Converts an array into a stream.
+   • IntStream.range() – Creates a stream of numbers within a range.
+   • BufferedReader.lines() – Converts lines of a file into a stream.
+
+   2. Intermediate Operators: Transform or filter data without executing immediately (lazy evaluation).
+   • filter() – Selects elements that match a given condition.
+   • map() – Transforms each element using a function.
+   • flatMap() – Flattens nested structures into a single stream.
+   • distinct() – Removes duplicate elements from the stream.
+   • sorted() – Sorts elements in natural or custom order.
+   • limit(n) – Restricts the stream to the first n elements.
+   • skip(n) – Skips the first n elements in the stream.
+   • peek() – Used for debugging without modifying elements.
+
+   3. Terminal Operators: Trigger execution and produce a final result, consuming the stream.
+   • collect() – Converts a stream into a List, Set, or Map.
+   • forEach() – Performs an action for each element.
+   • count() – Returns the number of elements in the stream.
+   • findFirst() – Retrieves the first element of the stream.
+   • findAny() – Retrieves any element from the stream.
+   • reduce() – Aggregates elements into a single result.
+   • toArray() – Converts stream elements into an array.
+
+   4. Short-Circuiting Operators: Stop execution early when a condition is met for better performance.
+   • anyMatch() – Returns true if any element matches a condition.
+   • allMatch() – Returns true if all elements match a condition.
+   • noneMatch() – Returns true if no elements match a condition.
+   • limit(n) – Stops processing after selecting n elements.
+   • findFirst() – Retrieves the first element and stops further operations.
+========================================================================================================================

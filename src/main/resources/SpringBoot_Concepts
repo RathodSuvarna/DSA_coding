@@ -3,12 +3,11 @@ SpringBoot:
 **************
 
 1. What is Spring Boot and its advantages?
-Spring Boot is a framework built on top of Spring that makes it faster and easier to develop Java
+Spring Boot is a open source framework built on top of Spring that makes it faster and easier to develop Java
 applications. Normally with Spring, we have to do a lot of manual setup, configuration, and XML files.
 Spring Boot removes that pain by giving auto-configuration, embedded servers, and prebuilt
 dependencies. So, we can just focus on writing business logic instead of wiring everything.
 
-Spring Boot is a framework that creates stand-alone, production grade Spring based applications.
 So, this framework has so many advantages.
  Easy to use: The majority of the boilerplate code required to create a Spring application is reduced
 by Spring Boot.
@@ -28,40 +27,51 @@ while an application is running, and see those changes immediately reflected wit
 restart the application.
 ========================================================================================================================
 2. Explain @SpringBootApplication.
+The @SpringBootApplication annotation is the primary entry point of any Spring Boot application.
+
 It is a combination of three important Spring annotations:
- @EnableAutoConfiguration: Automatically configures beans depending on what’s on the classpath.
-For example, when we illustrate the spring-boot-starter-web dependency in the classpath, Spring
-boot auto-configures Tomcat , and Spring MVC .
- @ComponentScan : This annotation scans the components (@Component, @Service, etc.) in the
-package of annotated class and its sub-packages.
- @Configuration: This annotation configures the beans and packages in the class path.
-So, using @SpringBootApplication at the main class makes the application ready with all these features
-at once.
 
-1️⃣ @Configuration
-Indicates that the class can be used by the Spring IoC container as a source of bean definitions.
-
-✅ 2️⃣ @EnableAutoConfiguration
-Tells Spring Boot to automatically configure beans based on the classpath dependencies.
+ @EnableAutoConfiguration:
+Automatically configures your application based on the dependencies declared in the classpath.
 if Spring Web dependency (spring-boot-starter-web) is on your classpath → Boot automatically configures an
 embedded Tomcat server and DispatcherServlet.
 If Spring Data JPA is present → Boot auto-configures a DataSource and EntityManagerFactory.
 So you don’t have to manually configure everything — Boot does it automatically.
 
-✅ 3️⃣ @ComponentScan
-Tells Spring to scan the current package and sub-packages for beans annotated with
+ @ComponentScan :
+ Tells Spring to scan the current package and sub-packages for beans annotated with
 @Component, @Service, @Repository, and @Controller.
 💡 It automatically registers those classes as beans in the Spring Application Context.
+
+ @Configuration:
+is a class-level annotation, Indicates that the class can be used by the Spring IoC container as a source of bean definitions.
+It serves as a replacement for XML-based configuration.
+
+So, using @SpringBootApplication at the main class makes the application ready with all these features
+at once.
+
+========================================================================================================================
+Important annotations:
+@Bean :
+@Bean is a method-level annotation used inside a @Configuration-annotated class to define a bean explicitly.
+
+@Value:
+Injects individual values from properties or YAML files. Lightweight and direct.
+
+@ConfigurationProperties:
+● Maps a group of related properties into a POJO.
+● Cleaner for structured configs.
 ========================================================================================================================
 3. What is dependency injection, and how does @Autowired help?
 Dependency injection is a design pattern where objects don’t create their own dependencies.
 Instead, the container (Spring IOC) provides the required objects.
+
 For example, if a Car class needs an Engine, instead of writing new Engine(),Spring inject the engine for
-us. This reduces coupling, makes testing easier (we can inject mock objects), and improves
-maintainability.
-Interview Tip:
- In Spring, we can do this using constructor injection, setter injection, or field injection with
-annotations like @Autowired and @Qualifier.
+us.
+
+why it is useful:
+This reduces coupling, makes testing easier (we can inject mock objects), and improves maintainability.
+
 
 Indirect Questions:
 1.How does Spring achieve Inversion of Control (IoC)?

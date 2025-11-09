@@ -13,10 +13,10 @@ o Multiple, loosely coupled services.
 o Services can be developed and deployed independently.
 o Easier to scale and maintain.
 
-Example: In a monolithic application, a single codebase might handle user
-authentication, product catalog, and order processing. In a microservices
-architecture, these functionalities would be split into separate services: an
-authentication service, a catalog service, and an order service.
+Example:
+In a monolithic application, a single codebase might handle user authentication, product catalog, and order processing.
+In a microservices architecture, these functionalities would be split into separate services: an
+authentication service, a catalog service, and an order service, payment service.
 
 ========================================================================================================================
 2. Explain the benefits of using microservices.
@@ -101,7 +101,8 @@ Answer: Microservices communicate with each other using synchronous protocols (H
 protocols (message brokers like Kafka or RabbitMQ).
 ========================================================================================================================
 11. What is the role of an API Gateway in microservices?
-Answer: An API Gateway acts as a reverse proxy, routing client requests to the appropriate microservices.
+Answer: An API Gateway acts as a reverse proxy and entry point client request, it will route client requests to the
+appropriate microservices.
 It provides cross-cutting concerns such as authentication, logging, rate limiting, and more.
 ========================================================================================================================
 12. What is an API Gateway and why do we use it?
@@ -182,8 +183,7 @@ Answer:
   performance and reliability issues.
 • Sagas: Implement long-running transactions using the Saga pattern, where each step is a transaction in itself,
   and compensating transactions handle rollbacks.
-• Event-driven architecture: Use events to trigger and coordinate actions
-  across microservices, ensuring eventual consistency.
+• Event-driven architecture: Use events to trigger and coordinate actions across microservices, ensuring eventual consistency.
 ========================================================================================================================
 
 26. What is the role of Docker in deploying microservices?

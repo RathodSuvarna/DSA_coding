@@ -1,0 +1,31 @@
+Explain Spring MVC architecture?
+The Spring MVC architecture is a Model-View-Controller (MVC) framework used for building web
+applications in Java. It promotes a clear separation of concerns, making applications more modular,
+maintainable, and easier to develop.
+
+Key Components of Spring MVC Architecture:
+ DispatcherServlet (Front Controller):
+Acts as the central entry point for all incoming HTTP requests.
+Initializes the Spring application context and loads configurations.
+Delegates requests to appropriate controllers based on configured mappings.
+
+ HandlerMapping:
+Maps incoming requests to specific controller methods.
+Determines which controller should handle a particular request based on URL patterns,
+HTTP methods, and other criteria.
+
+ Controller:
+Handles user input and business logic.
+Processes requests, interacts with the Model (business logic and data), and prepares
+data for the View.
+Returns a ModelAndView object, which contains the view name and the model data.
+
+ ModelAndView:
+A container object that holds both the model data and the name of the view to be rendered.
+
+ ViewResolver:
+Resolves the logical view name returned by the controller into a concrete View implementation (e.g., a JSP page, Thymeleaf template).
+
+ View:
+Renders the user interface, displaying the data from the Model.
+Responsible for generating the final output (e.g., HTML, JSON, XML) to be sent back to the client.

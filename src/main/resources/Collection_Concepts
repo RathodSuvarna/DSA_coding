@@ -73,10 +73,30 @@ Hashtable is synchronized, which means thread-safe but slower, and it does not a
 HashMap is preferred in modern applications.
 ========================================================================================================================
 7. How does HashMap work internally?
-A HashMap stores key-value pairs in buckets based on the key’s hashCode().
-When you put a key-value pair, it calculates the hash, finds the right bucket, and adds it there.
-If two keys have the same hash, it uses a linked list or tree (since Java 8) to store them in the same bucket.
-When retrieving, it compares the key using equals() to return the correct value.
+A HashMap stores element in key-value pairs
+
+A HashMap in Java is internally implemented as an array of buckets, where each bucket is a linked list or a
+balanced tree (Red-Black Tree since Java 8).
+
+HashMap uses HashFunction
+hash function is a algorithm that takes an input as a key and returns a fixed size numerical value as the output,
+known as HashCode.
+
+first key is passed through a hashfuction to generate unique hash code, this hashcode determines where the key value
+pair will be stored in the array.
+
+the hashcode is then used to calculate an index in the array or bucket using
+int index = hashcode % array Size;
+
+key value pair will be stored in the bucket at the calaculated index, each bucket can hole multiple key-value pairs
+this is called collision.
+
+Handling Collition:
+since different keys can generate same index (called collision) Hashmap
+
+If Multiple key value pairs map to same bucket they stored in linked list inside the bucket.
+
+when key value pair is retrieved the hashmap travers the linked list and check each node’s key using .equals() until finds the match
 
 ========================================================================================================================
 8. Why do we override hashCode() and equals()?

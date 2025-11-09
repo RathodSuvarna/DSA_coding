@@ -10,7 +10,7 @@ public class CheckOddNum {
     public static void main(String[] args) {
         List<Integer> num = Arrays.asList(4, 3, 7,8, 9, 10, 12, 5);
         num.stream()
-                .filter(a ->a%2 !=0)
+                .filter(a ->a%2 !=0)  // to check odd numbers we need to filter.
                 .forEach(System.out::println);
     }
 

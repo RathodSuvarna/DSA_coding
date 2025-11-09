@@ -10,10 +10,10 @@ Abstraction
 Inheritance
 Polymorphism
 classes and Objects
-
+========================================================================================================================
 4. encapsulation
 Encapsulation means binding data and methods into single unit and restrict the outside access.
-
+========================================================================================================================
 5. Abstraction
 abstraction involves showing only important features of an object and hiding the complex details.
 abstraction can be achieved by Abstract class and Interfaces
@@ -27,7 +27,7 @@ when an abstract class implements the interface it is not required to implement 
 clas can inherit from abstract class and implement interfaces, abstract classes are used to achieve a form of multiple inheritance.
 abstract methods in abstract class can have access modifiers like public, protected or default(package private).
 abstract class can have final methods which cannot be overridden by subclass. this ensures certain methods remains unchanged across all the sub classes.
-
+========================================================================================================================
 Interface:
 it is like blue print that defines what methods class must have without specifying how they work.
 subclasses have to implement all the methods defined in interface.
@@ -58,7 +58,7 @@ the implementation of these methods have to be provided in separate concrete cla
 if new methods was added to interface it's implementation has to be provided in every class that implements the interface.
 to overcome these issues java 8 introduced default methods.
 default methods allows interfaces to have methods with the implementation. this can be done with without affecting the classes that implements the interface.
-
+========================================================================================================================
 6. Inheritance
 Inheritance allows one class to inherit fields and methods from another class
 
@@ -72,13 +72,13 @@ Hybrid Inheritance - combination of two or more types of inheritance such as mul
 subclass : the class that inherits from the superclass it can add new attributes and methods or override existing one from super class.
 Superclass : the class being inhered from. it provide attributes and methods that can be used by subclasses.
 super Keyword: Used in sub classes to refer to its immediate superclass. It can also call superclass methods and constructors.
-
+========================================================================================================================
 Q. Explain how 'inheritance' and 'composition' are different ?
 inheritance
 inheritance is a mechanism where one class inherit the property and behavior of from another class.
 the sub class can also override the method of superclass to provide it's won implementation.
 it is an "is-a" relationship, meaning child class is type of parent class.
-
+========================================================================================================================
 7. Polymorphism
 having multiple forms
 polymorphism allows methods to do different things based on object it is acting upon.
@@ -99,38 +99,88 @@ It allows sub classes to provide specific implementation of method that us alrea
 method overriding is only applicable in inheritance where sub class inherits methods from it's superclass.
 it is also call late binding
 cannot override static methods. if static method is redefined in the sub class it is called method hiding.
-
+========================================================================================================================
 8. classes and objects
 Classes are blue prints of creating objects, and objects are instances of classes that holds data and methods to manipulate that data.
 class: blueprint for creating an objects, defining initial states(variables) and behavior (methods).
-
+========================================================================================================================
 9. Method hiding
 method hiding occurs when a sub class defines a static method with same signature as a static method in it's super class
 the method in sub class hides the method in super class. which means if we call static method on sub class the subclass
 version will get execute not the super class version.
 it differs from method overriding because it involves instance method.
-
+========================================================================================================================
 10. variable hiding
 variable hiding occurs when a local variable or parameter in the method or constructor has same name as
 instance variable(also known as member variable) or a class variable(static variable)
 in such cases local variables or parameters hides the instance variables or class variables.
 variable hiding happens when variables declared in sub class has the same name as variable declared in the
 superclass causing the subclass variable to hide the parent class variable when accessed within subclass.
+========================================================================================================================
+🧠 Q: How can you make a class immutable in Java?
+A class is immutable when its state (the values of its fields) cannot be changed after it’s created.
 
-How do you handle memory leaks in Java?
-A memory leak in Java happens when objects that are no longer needed remain referenced, preventing the
-Garbage Collector from reclaiming that memory.
+⚙️ Steps to Make a Class Immutable
+Declare the class as final → so it cannot be subclassed.
+Make all fields private and final → so they can’t be modified after initialization.
+Initialize all fields through a constructor → no setters.
+Don’t provide any setters → only getters.
+Return copies (deep copies) of mutable objects from getters.
+Avoid exposing internal mutable objects directly.
 
-To handle and prevent memory leaks:
-Always close resources (use try-with-resources).
-Avoid static references to large objects.
-Use WeakReference / WeakHashMap for caches.
-Remove listeners after use.
-Monitor heap usage with VisualVM / MAT / JConsole.
-I usually use tools like Eclipse MAT or Java Flight Recorder to detect leaks and analyze heap dumps.
+⚡ Advantages of Immutability
+Thread-safe by default (no synchronization needed)
+Safe to share across threads
+Easier to test and debug
+Can be used as keys in HashMap or elements in Set safely
 
+🧩 Examples of Immutable Classes in Java
+String
+Wrapper classes like Integer, Double, Boolean
+LocalDate, LocalTime, Instant (Java 8 time API)
 
+========================================================================================================================
+One more way making immutable calss
+💬 Interview Answer Example:
+“Earlier, we used final classes and private final fields with no setters to make classes immutable.
+But from Java 14 onwards, we can use records, which are immutable data carriers by design.
+They automatically generate final fields, constructors, getters, and equals()/hashCode() methods, giving us clean,
+immutable data models with much less code.”
 
+“The latest way to create immutable classes in Java is by using records — introduced in Java 14 — which are immutable,
+final, and concise data holders.”
+
+there is a modern (Java 14+) way to create immutable classes more easily using records in Java.
+
+Since Java 14, the simplest and most modern way to create an immutable class is by using a record.
+Records are a special kind of class introduced to model immutable data without writing boilerplate code.
+
+⚙️ What is a Record?
+A record is a new type of class in Java that is:
+Immutable by default
+Final by default (cannot be subclassed)
+Has final fields
+Automatically provides equals(), hashCode(), and toString() implementations
+
+Ex: public record Employee(String name, int age, String department) { }
+This single line automatically creates:
+A final class named Employee
+Private final fields: name, age, department
+A constructor:
+public Employee(String name, int age, String department)
+Getters (called accessors):
+name(), age(), department()
+equals(), hashCode(), and toString() methods
+
+⚙️ Records Are Always Immutable
+All fields are private and final
+No setters are generated
+No subclassing allowed (records are implicitly final)
+If you pass a mutable object (like List), you should still make a defensive copy in the constructor:
+========================================================================================================================
+Advantages of using Records over classic immutable classes:
+Records provide built-in immutability, automatically generate constructors, getters, equals(), hashCode(),
+and toString(), resulting in cleaner, more concise, and less error-prone code compared to manually creating immutable classes.
 
 
 

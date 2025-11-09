@@ -1,0 +1,122 @@
+What is Garbeg Collection
+Garbage Collection (GC) in Java is the process by which the JVM automatically identifies and removes objects that are
+no longer reachable in memory, to free up heap space and prevent memory leaks.
+It helps manage memory automatically so developers don’t need to manually allocate or deallocate memory like in C or C++.
+
+When no variable or reference points to an object in memory, that object becomes eligible for garbage collection, and
+the JVM’s Garbage Collector reclaims its memory.
+
+Removing unwanted objects from the heap memory so that new objects can occupy that memory is called garbage collection.
+========================================================================================================================
+Types Of Garbage Collectors In Java :
+Serial Garbage Collector
+Parallel Garbage Collector
+Concurrent Mark-Sweep (CMS) Garbage Collector
+Garbage-First (G1) Garbage Collector
+Z Garbage Collector
+Shenandoah Garbage Collector
+Epsilon Garbage Collector
+========================================================================================================================
+Throughput Vs Latency Of Garbage Collectors :
+Throughput and latency are two parameters used to determine the performance of garbage collectors in Java.
+
+Throughput :
+It is the percentage of total time spent running the actual application than the time spent collecting the garbage.
+For example, if an application runs for 90 seconds and collects garbage for 10 seconds, then throughput = 90%.
+Higher the throughput, garbage collector is said to be good.
+
+Latency :
+It is the time an application is paused for collecting the garbage. Lower the latency, garbage collector is said to be good.
+For example, if an application pauses for 10ms for every GC event, then latency is 10ms per GC event.
+Below table summarizes all garbage collectors in Java with their internal working, throughput, latency, heap size and use cases.
+
+
+========================================================================================================================
+Types Of References In Java : Strong, Soft, Weak And Phantom
+VM automatically identifies and removes objects that are no longer reachable in memory, to free up heap space and
+prevent memory leaks.
+Depending upon how objects are garbage collected, references to those objects in java are grouped into 4 types. They are,
+
+1) Strong References
+These type of references we use daily while writing the code. Any object in the memory which has active strong reference
+ is not eligible for garbage collection. For example, in the below program, reference variable ‘a’ is a strong
+ reference which is pointing to class A-type object. At this point of time, this object can’t be garbage collected as
+ it has strong reference.
+
+2) Soft References
+The objects which are softly referenced will not be garbage collected (even though they are available for garbage
+collection) until JVM badly needs memory. These objects will be cleared from the memory only if JVM runs out of memory.
+You can create a soft reference to an existing object by using  java.lang.ref.SoftReference class.
+
+3) Weak References
+JVM ignores the weak references. That means objects which has only week references are eligible for garbage collection.
+They are likely to be garbage collected when JVM runs garbage collector thread. JVM doesn’t show any regard for weak
+references.
+
+4) Phantom References
+The objects which are being referenced by phantom references are eligible for garbage collection. But, before removing
+them from the memory, JVM puts them in a queue called ‘reference queue’ . They are put in a reference queue after
+ calling finalize() method on them. You can’t retrieve back the objects which are being phantom referenced. That means
+ calling get() method on phantom reference always returns null.
+========================================================================================================================
+What is a Memory Leak in Java and how can you prevent it?
+Interview-style Answer Example:
+“A memory leak occurs when objects that are no longer needed remain referenced and cannot be garbage collected.
+This usually happens with static collections, unclosed resources, or listeners not removed.
+To prevent it, I make sure to release references, use weak references for caches, close resources using
+try-with-resources, and regularly profile the application with tools like VisualVM or JProfiler.”
+
+“A memory leak is when unused objects are still referenced, blocking garbage collection. Prevent it by cleaning up
+references, using weak references, and properly closing resources.”
+
+Explaination:
+A memory leak in Java occurs when objects are no longer used by the application but still remain referenced in memory,
+ preventing the Garbage Collector from reclaiming that memory.
+Over time, this causes the heap to fill up, leading to OutOfMemoryError and degraded application performance.
+
+A memory leak happens when your program keeps unnecessary references to objects that are no longer needed —
+so the Garbage Collector thinks they’re still in use and never removes them.
+
+Example of Memory Leak:
+import java.util.*;
+
+public class MemoryLeakExample {
+    static List<Object> list = new ArrayList<>();
+
+    public static void main(String[] args) {
+        for (int i = 0; i < 1000000; i++) {
+            Object obj = new Object();
+            list.add(obj); // keeps growing, never cleared
+        }
+        System.out.println("Finished adding objects");
+    }
+}
+
+The static list holds references to all Objects created.
+Even though the loop ends, the list still references them.
+GC can’t collect those objects → memory leak.
+
+🧩 How to Prevent Memory Leaks
+✅ 1. Release references when no longer needed
+Set large objects or collections to null after use:
+
+✅ 2. Use WeakReference / WeakHashMap
+These allow the GC to collect objects even if they’re still referenced weakly.
+
+✅ 3. Close resources properly
+Use try-with-resources to automatically close streams or connections:
+
+✅ 4. Remove unused listeners and observers
+Always unregister listeners when they’re no longer needed to avoid keeping unnecessary references.
+
+✅ 5. Use profiling tools
+Detect memory leaks using tools like:
+VisualVM
+JProfiler
+Eclipse MAT (Memory Analyzer Tool)
+YourKit
+They help find which objects remain in memory and what references are keeping them alive.
+
+========================================================================================================================
+
+========================================================================================================================
